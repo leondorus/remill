@@ -10,7 +10,9 @@ object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
             val application = this[APPLICATION_KEY] as RemillApplication
-            DrugViewModel()
+            val drugGetUseCase = application.container.drugGetUseCase
+            val drugEditUseCase = application.container.drugEditUseCase
+            DrugViewModel(drugGetUseCase, drugEditUseCase)
         }
     }
 }

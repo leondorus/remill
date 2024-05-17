@@ -9,5 +9,4 @@ class RemillApplication: Application() {
         super.onCreate()
         container = AndroidRemillContainer(this)
     }
-
 }
