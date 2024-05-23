@@ -10,22 +10,21 @@ import org.leondorus.remill.domain.drugs.DrugEditUseCase
 import org.leondorus.remill.domain.drugs.DrugGetUseCase
 import org.leondorus.remill.domain.model.Drug
 
-class DrugViewModel(
+class DrugsViewModel(
     drugGetUseCase: DrugGetUseCase,
-    drugEditUseCase: DrugEditUseCase,
 ) : ViewModel() {
 
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
     }
 
-    val drugUiState: StateFlow<DrugUiState> = drugGetUseCase
+    val drugsUiState: StateFlow<DrugsUiState> = drugGetUseCase
         .getAllDrugs()
-        .map{DrugUiState(it) }
+        .map{DrugsUiState(it) }
         .stateIn(scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-            initialValue = DrugUiState()
+            initialValue = DrugsUiState()
         )
 }
 
-data class DrugUiState(val drugs: List<Drug> = listOf())
+data class DrugsUiState(val drugs: List<Drug> = listOf())

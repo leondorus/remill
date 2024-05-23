@@ -5,7 +5,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import org.leondorus.remill.ui.screens.drugs.DrugDestination
+import org.leondorus.remill.ui.screens.drug.DrugInfoDestination
+import org.leondorus.remill.ui.screens.drugs.DrugsDestination
 import org.leondorus.remill.ui.screens.drugs.DrugScreen
 
 @Composable
@@ -15,11 +16,11 @@ fun RemillNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = DrugDestination.route, //TODO(change this to dayplan)
+        startDestination = DrugsDestination.route, //TODO(change this to dayplan)
         modifier = modifier,
     ) {
-       composable(DrugDestination.route) {
-           DrugScreen()
+       composable(DrugsDestination.route) {
+           DrugScreen({id -> navController.navigate("${DrugInfoDestination.route}/$id")})
        }
     }
 }

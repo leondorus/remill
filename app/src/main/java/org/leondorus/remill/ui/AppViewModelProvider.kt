@@ -5,15 +5,18 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import org.leondorus.remill.RemillApplication
-import org.leondorus.remill.ui.screens.drugs.DrugViewModel
+import org.leondorus.remill.ui.screens.drug.DrugInfoViewModel
+import org.leondorus.remill.ui.screens.drugs.DrugsViewModel
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
-            DrugViewModel(
+            DrugsViewModel(
                 remillApplication().container.drugGetUseCase,
-                remillApplication().container.drugEditUseCase
             )
+        }
+        initializer {
+            DrugInfoViewModel()
         }
     }
 }

@@ -12,10 +12,10 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
-import org.leondorus.remill.ui.screens.drugs.DrugDestination
+import org.leondorus.remill.ui.screens.drugs.DrugsDestination
 
 val DESTINATIONS: List<NavigationDestination> = listOf(
-    DrugDestination,
+    DrugsDestination,
 )
 
 @Composable
