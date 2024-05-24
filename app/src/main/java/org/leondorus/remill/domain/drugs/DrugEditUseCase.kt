@@ -4,13 +4,13 @@ import org.leondorus.remill.domain.model.Drug
 import org.leondorus.remill.domain.model.DrugId
 
 class DrugEditUseCase(private val drugEditRepo: DrugEditRepo) {
-    suspend fun updateDrug(drug: Drug): Boolean {
+    suspend fun addDrug(name: String): Drug {
+        return drugEditRepo.addDrug(name)
+    }
+    suspend fun updateDrug(drug: Drug) {
         return drugEditRepo.updateDrug(drug)
     }
-    suspend fun deleteDrug(drugId: DrugId): Boolean {
+    suspend fun deleteDrug(drugId: DrugId) {
         return drugEditRepo.deleteDrug(drugId)
     }
-
-    // returns false when there was no such drug
-    // returns true if there was such drug
 }

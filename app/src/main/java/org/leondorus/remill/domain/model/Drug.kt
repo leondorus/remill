@@ -1,9 +1,13 @@
 package org.leondorus.remill.domain.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
 data class Drug(
     val id: DrugId,
     val name: String,
-    val notifGroup: List<NotifGroupId>
+    val notifGroup: NotifGroupId?
 )
 
-data class DrugId(val id: Int)
+@Parcelize
+data class DrugId(val id: Int): Parcelable

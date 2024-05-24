@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import org.leondorus.remill.domain.drugs.DrugEditUseCase
 import org.leondorus.remill.domain.drugs.DrugGetUseCase
 import org.leondorus.remill.domain.model.Drug
 
@@ -18,13 +17,12 @@ class DrugsViewModel(
         private const val TIMEOUT_MILLIS = 5_000L
     }
 
-    val drugsUiState: StateFlow<DrugsUiState> = drugGetUseCase
-        .getAllDrugs()
-        .map{DrugsUiState(it) }
-        .stateIn(scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-            initialValue = DrugsUiState()
-        )
+    val drugsUiState: StateFlow<DrugsUiState> =
+        drugGetUseCase.getAllDrugs().map { DrugsUiState(it) }.stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+                initialValue = DrugsUiState()
+            )
 }
 
 data class DrugsUiState(val drugs: List<Drug> = listOf())

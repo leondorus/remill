@@ -4,12 +4,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.ui.graphics.vector.ImageVector
 import org.leondorus.remill.R
+import org.leondorus.remill.ui.navigation.ItemNavigationDestination
 import org.leondorus.remill.ui.navigation.NavigationDestination
 
-object DrugInfoDestination: NavigationDestination {
+object DrugInfoDestination: ItemNavigationDestination {
     override val route: String = "drug_info"
     override val titleRes: Int = R.string.drug_information
-    override val icon: ImageVector = Icons.Default.Info
-    val drugIdArg = "drugId"
-    val routeWithArgs = "$route/$drugIdArg"
+    override val itemIdArg = "drugId"
 }

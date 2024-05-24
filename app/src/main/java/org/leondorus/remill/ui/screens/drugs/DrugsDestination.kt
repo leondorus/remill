@@ -4,9 +4,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.ui.graphics.vector.ImageVector
 import org.leondorus.remill.R
-import org.leondorus.remill.ui.navigation.NavigationDestination
+import org.leondorus.remill.ui.navigation.IconNavigationDestination
 
-object DrugsDestination: NavigationDestination {
+object DrugsDestination: IconNavigationDestination {
     override val route: String = "/drugs"
     override val titleRes: Int = R.string.drugs_titile
     override val icon: ImageVector = Icons.AutoMirrored.Default.List

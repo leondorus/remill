@@ -14,7 +14,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import org.leondorus.remill.ui.screens.drugs.DrugsDestination
 
-val DESTINATIONS: List<NavigationDestination> = listOf(
+val DESTINATIONS: List<IconNavigationDestination> = listOf(
     DrugsDestination,
 )
 

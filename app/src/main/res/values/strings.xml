@@ -2,4 +2,8 @@
     <string name="app_name">Remill</string>
     <string name="drugs_titile">Drugs</string>
     <string name="drug_information">Drug Information</string>
+    <string name="add_new_drug">Add new drug</string>
+    <string name="name">Name</string>
+    <string name="save">Save</string>
+    <string name="add_drug_title">Add drug</string>
 </resources>
