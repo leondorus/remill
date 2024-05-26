@@ -6,4 +6,6 @@
     <string name="name">Name</string>
     <string name="save">Save</string>
     <string name="add_drug_title">Add drug</string>
+    <string name="name_is_druginfo">Name: %1$s</string>
+    <string name="edit_drug">Edit drug</string>
 </resources>

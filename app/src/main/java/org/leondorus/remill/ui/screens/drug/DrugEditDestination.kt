@@ -1,11 +1,10 @@
 package org.leondorus.remill.ui.screens.drug
 
-import androidx.compose.ui.graphics.vector.ImageVector
-import org.leondorus.remill.ui.navigation.NavigationDestination
+import org.leondorus.remill.R
+import org.leondorus.remill.ui.navigation.ItemNavigationDestination
 
-object DrugEditDestination: NavigationDestination {
-    override val route: String
-        get() = TODO("Not yet implemented")
-    override val titleRes: Int
-        get() = TODO("Not yet implemented")
+object DrugEditDestination: ItemNavigationDestination {
+    override val route: String = "drug_edit"
+    override val itemIdArg: String = "drug_id"
+    override val titleRes: Int = R.string.edit_drug
 }

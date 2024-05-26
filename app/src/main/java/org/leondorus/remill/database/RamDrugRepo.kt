@@ -3,7 +3,9 @@ package org.leondorus.remill.database
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import org.leondorus.remill.domain.drugs.DrugEditRepo
 import org.leondorus.remill.domain.drugs.DrugGetRepo
@@ -15,6 +17,14 @@ class RamDrugRepo(private val coroutineScope: CoroutineScope): DrugGetRepo, Drug
     private val dataMap = mutableMapOf<DrugId, Drug>()
     private val drugObservers = mutableMapOf<DrugId, MutableSharedFlow<Drug?>>()
     private val allDrugs = MutableSharedFlow<List<Drug>>()
+
+    init {
+        val id = DrugId(0)
+        val drug = Drug(id, "a", null)
+        coroutineScope.launch {
+            putAndEmit(id, drug)
+        }
+    }
 
     private suspend fun putAndEmit(id: DrugId, drug: Drug) {
         dataMap[id] = drug
@@ -31,11 +41,21 @@ class RamDrugRepo(private val coroutineScope: CoroutineScope): DrugGetRepo, Drug
             mutableSharedFlow.emit(friend)
         }
 
-        return mutableSharedFlow.distinctUntilChanged()
+        return flow {
+            emit(friend)
+            mutableSharedFlow.distinctUntilChanged().collect {
+                emit(it)
+            }
+        }
     }
 
     override fun getAllDrugs(): Flow<List<Drug>> {
-        return allDrugs
+        return flow {
+            emit(dataMap.values.toList())
+            allDrugs.collect {
+                emit(it)
+            }
+        }
     }
 
     override suspend fun addDrug(name: String): Drug {

@@ -14,7 +14,7 @@ interface IconNavigationDestination: NavigationDestination {
 interface ItemNavigationDestination: NavigationDestination {
     val itemIdArg: String
     val routeWithArgs
-        get() = "$route/$itemIdArg"
+        get() = "$route/{$itemIdArg}"
 }
 
 
