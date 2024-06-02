@@ -76,7 +76,7 @@ class RamDrugRepo(private val coroutineScope: CoroutineScope): DrugGetRepo, Drug
         val id = drug.id
         val existed = dataMap[id] != null
         if (!existed) {
-            throw NoDrugWithSuchId()
+            throw NoDrugWithSuchId("No drug with id=$id")
         }
 
         putAndEmit(id, drug)
@@ -85,7 +85,7 @@ class RamDrugRepo(private val coroutineScope: CoroutineScope): DrugGetRepo, Drug
     override suspend fun deleteDrug(drugId: DrugId) {
         val existed = dataMap.remove(drugId) != null
         if (!existed) {
-            throw NoDrugWithSuchId()
+            throw NoDrugWithSuchId("No drug with id=$drugId")
         }
 
         drugObservers[drugId]?.emit(null)

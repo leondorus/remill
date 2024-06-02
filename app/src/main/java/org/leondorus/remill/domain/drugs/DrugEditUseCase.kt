@@ -5,6 +5,7 @@ import org.leondorus.remill.domain.model.DrugId
 
 class DrugEditUseCase(private val drugEditRepo: DrugEditRepo) {
     suspend fun addDrug(name: String): Drug {
+        // TODO(add notifgroup by default)
         return drugEditRepo.addDrug(name)
     }
     suspend fun updateDrug(drug: Drug) {

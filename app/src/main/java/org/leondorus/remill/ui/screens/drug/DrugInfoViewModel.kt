@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import org.leondorus.remill.domain.drugs.DrugGetRepo
 import org.leondorus.remill.domain.drugs.DrugGetUseCase
 import org.leondorus.remill.domain.model.DrugId
+import java.time.LocalDateTime
 
 class DrugInfoViewModel(
     savedStateHandle: SavedStateHandle,
@@ -22,11 +23,11 @@ class DrugInfoViewModel(
     val uiState: StateFlow<DrugInfoUiState> = drugGetUseCase.getDrug(drugId)
         .filterNotNull()
         .map {
-            DrugInfoUiState(name = it.name)
+            DrugInfoUiState(name = it.name, "", listOf())
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-            initialValue = DrugInfoUiState("")
+            initialValue = DrugInfoUiState("", "", listOf())
         )
 
 
@@ -35,4 +36,4 @@ class DrugInfoViewModel(
     }
 }
 
-data class DrugInfoUiState(val name: String)
+data class DrugInfoUiState(val name: String, val notifGroupName: String, val times: List<LocalDateTime>)

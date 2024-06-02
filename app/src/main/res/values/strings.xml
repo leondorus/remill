@@ -3,9 +3,14 @@
     <string name="drugs_titile">Drugs</string>
     <string name="drug_information">Drug Information</string>
     <string name="add_new_drug">Add new drug</string>
-    <string name="name">Name</string>
+    <string name="drug_name">Drug name</string>
     <string name="save">Save</string>
     <string name="add_drug_title">Add drug</string>
     <string name="name_is_druginfo">Name: %1$s</string>
     <string name="edit_drug">Edit drug</string>
+    <string name="cancel">Cancel</string>
+    <string name="add">Add</string>
+    <string name="delete_this_notification">Delete this notification</string>
+    <string name="notifgroup_name">Notifgroup name</string>
+    <string name="add_new_time">Add new time</string>
 </resources>
