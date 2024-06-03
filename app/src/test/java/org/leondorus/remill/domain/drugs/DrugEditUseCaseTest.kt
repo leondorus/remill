@@ -1,6 +1,5 @@
 package org.leondorus.remill.domain.drugs
 
-import androidx.compose.runtime.toMutableStateMap
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -93,7 +92,7 @@ class SimpleEditRepo(initDrugs: Iterable<Pair<DrugId, Drug>>) : DrugEditRepo {
     override suspend fun updateDrug(drug: Drug) {
         val contains = drugs.contains(drug.id)
         if (!contains) {
-            throw NoDrugWithSuchId()
+            throw NoDrugWithSuchId("No drug with id=$drug.id")
         }
         drugs[drug.id] = drug
     }
@@ -101,7 +100,7 @@ class SimpleEditRepo(initDrugs: Iterable<Pair<DrugId, Drug>>) : DrugEditRepo {
     override suspend fun deleteDrug(drugId: DrugId) {
         val contains = drugs.contains(drugId)
         if (!contains) {
-            throw NoDrugWithSuchId()
+            throw NoDrugWithSuchId("No drug with id=$drugId")
         }
         drugs.remove(drugId)
     }

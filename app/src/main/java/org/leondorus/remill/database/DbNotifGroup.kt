@@ -26,10 +26,10 @@ data class DbNotifGroupTime(
 )
 
 data class DbUsePattern(
-    @Embedded val push: DbNotifTypePush,
-    @Embedded val audio: DbNotifTypeAudio,
-    @Embedded val flashlight: DbNotifTypeFlashlight,
-    @Embedded val blinkingScreen: DbNotifTypeBlinkingScreen
+    @Embedded(prefix = "push") val push: DbNotifTypePush,
+    @Embedded(prefix = "audio") val audio: DbNotifTypeAudio,
+    @Embedded(prefix = "flashlight") val flashlight: DbNotifTypeFlashlight,
+    @Embedded(prefix = "blinkingScreen") val blinkingScreen: DbNotifTypeBlinkingScreen
 )
 
 data class DbNotifTypePush(

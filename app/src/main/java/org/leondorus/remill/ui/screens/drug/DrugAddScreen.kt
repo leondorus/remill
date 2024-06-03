@@ -17,6 +17,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TimeInput
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
@@ -28,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import kotlinx.coroutines.launch
 import org.leondorus.remill.R
 import org.leondorus.remill.ui.AppViewModelProvider
@@ -68,7 +70,7 @@ fun DrugAddScreen(
         isDialogShown = uiState.isDialogShown,
         onStartNewDialog = { viewModel.showDialog() },
         onDialogDismiss = { viewModel.dismissDialog() },
-        onDialogAdd = { viewModel.addNotifTime(it) },
+        onDialogAdd = { viewModel.addNotifTime(it); viewModel.dismissDialog() },
         modifier = modifier
     )
 }
@@ -194,10 +196,10 @@ fun AddNewDateTimeDialog(
     val curLocalDateTime: LocalDateTime? = curLocalDate?.atTime(curLocalTime)
 
     Dialog(onDismissRequest = onCancel) {
-        Card(modifier = modifier) {
+        Card(modifier = modifier.fillMaxWidth()) {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 DatePicker(datePickerState)
-                TimePicker(timePickerState)
+                TimeInput(timePickerState)
                 Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                     OutlinedButton(onClick = onCancel) {
                         Text(stringResource(R.string.cancel))

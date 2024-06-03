@@ -4,8 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 
 @Database(entities = [DbDrug::class, DbNotifGroup::class, DbNotifGroupTime::class], version = 1)
+@TypeConverters(LocalDateTimeConverter::class)
 abstract class RemillDatabase: RoomDatabase() {
     abstract fun drugDao(): DbDrugDao
     abstract fun notifGroupDao(): DbNotifGroupDao

@@ -26,7 +26,8 @@ object AppViewModelProvider {
         }
         initializer {
             DrugAddViewModel(
-                remillApplication().container.drugEditUseCase
+                remillApplication().container.drugEditUseCase,
+                remillApplication().container.notifGroupEditUseCase
             )
         }
         initializer {

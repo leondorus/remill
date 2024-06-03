@@ -1,5 +1,6 @@
 package org.leondorus.remill.database
 
+import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -7,6 +8,7 @@ import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
+@Dao
 interface DbDrugDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE) // TODO(make this overwrite)
     suspend fun insertDrug(dbDrug: DbDrug): Long
