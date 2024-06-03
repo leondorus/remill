@@ -1,18 +1,15 @@
 package org.leondorus.remill.ui.screens.drug
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import org.leondorus.remill.domain.drugs.DrugEditUseCase
 import org.leondorus.remill.domain.model.NotifType
 import org.leondorus.remill.domain.model.NotifTypes
 import org.leondorus.remill.domain.model.Schedule
 import org.leondorus.remill.domain.model.UsePattern
-import org.leondorus.remill.domain.notifgroups.NotifGroupEditRepo
 import org.leondorus.remill.domain.notifgroups.NotifGroupEditUseCase
 import java.time.LocalDateTime
 
@@ -28,7 +25,7 @@ class DrugAddViewModel(private val drugEditUseCase: DrugEditUseCase, private val
         val usePattern = UsePattern(Schedule(_uiState.value.times), notifTypes)
         val notifGroup = notifGroupEditUseCase.addNotifGroup(_uiState.value.notifGroupName, usePattern)
 
-        val newDrug = drug.copy(notifGroup = notifGroup.id)
+        val newDrug = drug.copy(notifGroupId = notifGroup.id)
         drugEditUseCase.updateDrug(newDrug)
     }
 

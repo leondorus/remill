@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 data class Drug(
     val id: DrugId,
     val name: String,
-    val notifGroup: NotifGroupId?
+    val notifGroupId: NotifGroupId?
 )
 
 @Parcelize
