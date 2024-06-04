@@ -38,7 +38,7 @@ class DrugAddViewModel(private val drugEditUseCase: DrugEditUseCase, private val
     }
 
     fun addNotifTime(time: LocalDateTime) {
-        val newTimes = _uiState.value.times + time
+        val newTimes = (_uiState.value.times + time).sorted()
         _uiState.update { uiState -> uiState.copy(times = newTimes) }
     }
     fun deleteNotifTime(time: LocalDateTime) {

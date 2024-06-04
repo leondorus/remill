@@ -21,7 +21,8 @@ object AppViewModelProvider {
         initializer {
             DrugInfoViewModel(
                 this.createSavedStateHandle(),
-                remillApplication().container.drugGetUseCase
+                remillApplication().container.drugGetUseCase,
+                remillApplication().container.notifGroupGetUseCase
             )
         }
         initializer {
@@ -34,7 +35,9 @@ object AppViewModelProvider {
             DrugEditViewModel(
                 this.createSavedStateHandle(),
                 remillApplication().container.drugGetUseCase,
-                remillApplication().container.drugEditUseCase
+                remillApplication().container.drugEditUseCase,
+                remillApplication().container.notifGroupGetUseCase,
+                remillApplication().container.notifGroupEditUseCase,
             )
         }
     }

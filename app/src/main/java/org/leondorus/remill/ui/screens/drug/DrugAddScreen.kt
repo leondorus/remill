@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -25,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -91,6 +93,10 @@ fun DrugAddBody(
     onDialogAdd: (LocalDateTime) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    if (isDialogShown) {
+        AddNewDateTimeDialog(onAdd = { onDialogAdd(it) }, onCancel = { onDialogDismiss() })
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -109,10 +115,7 @@ fun DrugAddBody(
             onNotifGroupNameChange,
             notifGroupTimes,
             onNotifTimeDelete,
-            isDialogShown,
             onStartNewDialog,
-            onDialogDismiss,
-            onDialogAdd,
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -131,23 +134,15 @@ fun DrugAddBody(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotifGroupAddWidget(
     notifGroupName: String,
     onNotifGroupNameChange: (String) -> Unit,
     times: List<LocalDateTime>,
     onNotifTimeDelete: (LocalDateTime) -> Unit,
-    isDialogShown: Boolean,
     onStartNewDialog: () -> Unit,
-    onDialogDismiss: () -> Unit,
-    onDialogAdd: (LocalDateTime) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (isDialogShown) {
-        AddNewDateTimeDialog(onAdd = { onDialogAdd(it) }, onCancel = { onDialogDismiss() })
-    }
-
     Card(modifier = modifier) {
         Column {
             OutlinedTextField(
@@ -183,7 +178,7 @@ fun AddNewDateTimeDialog(
     onCancel: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val datePickerState = rememberDatePickerState()
+    val datePickerState = rememberDatePickerState(initialDisplayMode = DisplayMode.Input)
     val timePickerState = rememberTimePickerState()
 
     val curLocalDate: LocalDate?
@@ -195,9 +190,9 @@ fun AddNewDateTimeDialog(
 
     val curLocalDateTime: LocalDateTime? = curLocalDate?.atTime(curLocalTime)
 
-    Dialog(onDismissRequest = onCancel) {
-        Card(modifier = modifier.fillMaxWidth()) {
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+    Dialog(onDismissRequest = onCancel, DialogProperties( usePlatformDefaultWidth = false )) {
+        Card(modifier = modifier.padding(8.dp).fillMaxWidth()) {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                 DatePicker(datePickerState)
                 TimeInput(timePickerState)
                 Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {

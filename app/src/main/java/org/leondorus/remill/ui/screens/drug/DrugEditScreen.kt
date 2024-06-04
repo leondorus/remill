@@ -18,16 +18,27 @@ fun DrugEditScreen(
     val uiState by viewModel.uiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
 
-//    DrugAddBody(
-//        onSaveButtonClick = {
-//            coroutineScope.launch {
-//                viewModel.saveEditedDrug()
-//                goBack()
-//            }
-//        },
-//        onCancelButtonClick = goBack,
-//        drugName = uiState.name,
-//        onDrugNameUpdate = { viewModel.updateDrugName(it) },
-//        modifier = modifier
-//    )
+    DrugAddBody(
+        onSaveButtonClick = {
+            coroutineScope.launch {
+                viewModel.saveEditedDrug()
+                goBack()
+            }
+        },
+        onCancelButtonClick = goBack,
+
+        drugName = uiState.name,
+        onDrugNameUpdate = { viewModel.updateDrugName(it) },
+
+        notifGroupName = uiState.notifGroupName,
+        onNotifGroupNameChange = { viewModel.updateNotifGroupName(it) },
+        notifGroupTimes = uiState.times,
+        onNotifTimeDelete = {viewModel.deleteNotifTime(it)},
+
+        isDialogShown = uiState.isDialogShown,
+        onDialogAdd = { viewModel.addNotifTime(it); viewModel.dismissDialog() },
+        onStartNewDialog = { viewModel.showDialog() },
+        onDialogDismiss = { viewModel.dismissDialog() },
+        modifier = modifier
+    )
 }

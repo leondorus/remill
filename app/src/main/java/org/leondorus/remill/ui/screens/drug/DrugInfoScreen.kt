@@ -59,9 +59,9 @@ fun DrugInfoScreen(
 
 @Composable
 fun NotifGroupViewWidget(notifGroupName: String, times: List<LocalDateTime>, modifier: Modifier = Modifier) {
-    Card(modifier = modifier) {
+    Card(modifier = modifier.padding(8.dp)) {
         Column {
-            Text(notifGroupName)
+            Text("Notif group name: %s".format(notifGroupName))
             Spacer(modifier = Modifier.height(12.dp))
             LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 items(times) {
