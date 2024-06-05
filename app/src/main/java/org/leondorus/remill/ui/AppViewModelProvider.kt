@@ -10,6 +10,7 @@ import org.leondorus.remill.ui.screens.drug.DrugAddViewModel
 import org.leondorus.remill.ui.screens.drug.DrugEditViewModel
 import org.leondorus.remill.ui.screens.drug.DrugInfoViewModel
 import org.leondorus.remill.ui.screens.drugs.DrugsViewModel
+import org.leondorus.remill.ui.screens.settings.SettingsViewModel
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {
@@ -39,6 +40,10 @@ object AppViewModelProvider {
                 remillApplication().container.notifGroupGetUseCase,
                 remillApplication().container.notifGroupEditUseCase,
             )
+        }
+
+        initializer {
+            SettingsViewModel()
         }
     }
 }

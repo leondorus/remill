@@ -2,6 +2,6 @@
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.jetbrains.kotlin.android) apply false
-    alias(libs.plugins.kotlinSymbolProcessing) apply false
+    alias(libs.plugins.google.ksp) apply false
     alias(libs.plugins.room) apply false
 }

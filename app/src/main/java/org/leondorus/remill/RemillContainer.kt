@@ -1,10 +1,8 @@
 package org.leondorus.remill
 
 import android.content.Context
-import kotlinx.coroutines.MainScope
 import org.leondorus.remill.database.OfflineDrugRepo
 import org.leondorus.remill.database.OfflineNotifGroupRepo
-import org.leondorus.remill.database.RamDrugRepo
 import org.leondorus.remill.database.RemillDatabase
 import org.leondorus.remill.domain.drugs.DrugEditUseCase
 import org.leondorus.remill.domain.drugs.DrugGetUseCase
@@ -16,6 +14,7 @@ interface RemillContainer {
     val drugEditUseCase: DrugEditUseCase
     val notifGroupGetUseCase: NotifGroupGetUseCase
     val notifGroupEditUseCase: NotifGroupEditUseCase
+    val permissionManager: PermissionManager
 }
 
 class AndroidRemillContainer(context: Context): RemillContainer {
@@ -23,6 +22,7 @@ class AndroidRemillContainer(context: Context): RemillContainer {
     override val drugEditUseCase: DrugEditUseCase
     override val notifGroupGetUseCase: NotifGroupGetUseCase
     override val notifGroupEditUseCase: NotifGroupEditUseCase
+    override val permissionManager: PermissionManager = ActivityPermissionManager(context)
 
     init {
         val database = RemillDatabase.getDatabase(context)

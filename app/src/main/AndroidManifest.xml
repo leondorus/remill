@@ -2,6 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission
+        android:name="android.permission.USE_EXACT_ALARM"
+        android:minSdkVersion="33">
+    </uses-permission>
+    <uses-permission
+        android:name="android.permission.SCHEDULE_EXACT_ALARM"
+        android:maxSdkVersion="32">
+    </uses-permission>
+
     <application
         android:name=".RemillApplication"
         android:allowBackup="true"
@@ -23,6 +32,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver
+            android:name=".alarms.AlarmReceiver"
+            android:enabled="true">
+        </receiver>
     </application>
 
 </manifest>

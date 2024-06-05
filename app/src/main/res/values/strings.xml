@@ -13,4 +13,5 @@
     <string name="delete_this_notification">Delete this notification</string>
     <string name="notifgroup_name">Notifgroup name</string>
     <string name="add_new_time">Add new time</string>
+    <string name="settings_title">Settings</string>
 </resources>

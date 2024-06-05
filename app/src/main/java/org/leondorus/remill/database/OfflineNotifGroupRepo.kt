@@ -16,15 +16,9 @@ private const val TAG = "OfflineNotifGroupRepo"
 
 class OfflineNotifGroupRepo(private val notifGroupDao: DbNotifGroupDao) : NotifGroupGetRepo,
     NotifGroupEditRepo {
-    private fun usePatternToDb(usePattern: UsePattern): DbUsePattern {
-        val dbUsePattern = DbUsePattern(
-            push = DbNotifTypePush(usePattern.notifTypes.push.isActive),
-            audio = DbNotifTypeAudio(usePattern.notifTypes.audio.isActive),
-            flashlight = DbNotifTypeFlashlight(usePattern.notifTypes.flashlight.isActive),
-            blinkingScreen = DbNotifTypeBlinkingScreen(usePattern.notifTypes.blinkingScreen.isActive),
-        )
-
-        return dbUsePattern
+    private fun usePatternToDbNotifTypes(usePattern: UsePattern): DbNotifTypes {
+        val dbNotifTypes = usePattern.notifTypes.toDbNotifTypes()
+        return dbNotifTypes
     }
 
     private fun usePatternToDbTimes(usePattern: UsePattern, notifGroupId: NotifGroupId): List<DbNotifGroupTime> {
@@ -36,14 +30,9 @@ class OfflineNotifGroupRepo(private val notifGroupDao: DbNotifGroupDao) : NotifG
 
     private fun dbToUsePattern(
         times: List<DbNotifGroupTime>,
-        dbUsePattern: DbUsePattern,
+        dbNotifTypes: DbNotifTypes,
     ): UsePattern {
-        val notifTypes = NotifTypes(
-            NotifType.Push(dbUsePattern.push.isActive),
-            NotifType.Audio(dbUsePattern.audio.isActive),
-            NotifType.Flashlight(dbUsePattern.flashlight.isActive),
-            NotifType.BlinkingScreen(dbUsePattern.blinkingScreen.isActive),
-        )
+        val notifTypes = dbNotifTypes.toNotifTypes()
         val justTimes = times.map {
             it.dateTime
         }
@@ -52,7 +41,7 @@ class OfflineNotifGroupRepo(private val notifGroupDao: DbNotifGroupDao) : NotifG
     }
 
     override suspend fun addNotifGroup(name: String, usePattern: UsePattern): NotifGroup {
-        val dbUsePattern = usePatternToDb(usePattern)
+        val dbUsePattern = usePatternToDbNotifTypes(usePattern)
         val dbNotifGroup = DbNotifGroup(0, name, dbUsePattern)
         val notifGroupId = NotifGroupId(notifGroupDao.insertNotifGroup(dbNotifGroup).toInt())
 
@@ -67,7 +56,7 @@ class OfflineNotifGroupRepo(private val notifGroupDao: DbNotifGroupDao) : NotifG
     override suspend fun updateNotifGroup(newNotifGroup: NotifGroup) {
         val id = newNotifGroup.id.id
         val name = newNotifGroup.name
-        val dbUsePattern = usePatternToDb(newNotifGroup.usePattern)
+        val dbUsePattern = usePatternToDbNotifTypes(newNotifGroup.usePattern)
 
         val dbNotifGroup = DbNotifGroup(id, name, dbUsePattern)
         notifGroupDao.updateNotifGroup(dbNotifGroup)
@@ -93,7 +82,7 @@ class OfflineNotifGroupRepo(private val notifGroupDao: DbNotifGroupDao) : NotifG
             val drugIds = mapWithDrugs.values.first().map { DrugId(it) }
             val times = mapWithTimes.values.first()
 
-            val usePattern = dbToUsePattern(times, dbNotifGroup.usePattern)
+            val usePattern = dbToUsePattern(times, dbNotifGroup.notifTypes)
             val notifGroup = NotifGroup(NotifGroupId(dbNotifGroup.id), dbNotifGroup.name, usePattern, drugIds)
 
             notifGroup
@@ -132,7 +121,7 @@ class OfflineNotifGroupRepo(private val notifGroupDao: DbNotifGroupDao) : NotifG
                 val times = entry.value.second
                 val drugIds = entry.value.third.map {DrugId(it)}
 
-                val usePattern = dbToUsePattern(times, dbNotifGroup.usePattern)
+                val usePattern = dbToUsePattern(times, dbNotifGroup.notifTypes)
 
                 val notifGroupId = NotifGroupId(entry.key)
                 val notifGroup = NotifGroup(notifGroupId, dbNotifGroup.name, usePattern, drugIds)

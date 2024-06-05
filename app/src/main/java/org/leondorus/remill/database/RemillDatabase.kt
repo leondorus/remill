@@ -6,11 +6,12 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
-@Database(entities = [DbDrug::class, DbNotifGroup::class, DbNotifGroupTime::class], version = 1)
+@Database(entities = [DbDrug::class, DbNotifGroup::class, DbNotifGroupTime::class, DbPlatformNotification::class], version = 2)
 @TypeConverters(LocalDateTimeConverter::class)
 abstract class RemillDatabase: RoomDatabase() {
     abstract fun drugDao(): DbDrugDao
     abstract fun notifGroupDao(): DbNotifGroupDao
+    abstract fun platformNotificationDao(): DbPlatformNotificationDao
 
     companion object {
         @Volatile

@@ -4,13 +4,15 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import org.leondorus.remill.domain.model.NotifType
+import org.leondorus.remill.domain.model.NotifTypes
 import java.time.LocalDateTime
 
 @Entity
 data class DbNotifGroup(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String,
-    @Embedded val usePattern: DbUsePattern,
+    @Embedded val notifTypes: DbNotifTypes,
 )
 
 @Entity(
@@ -25,12 +27,32 @@ data class DbNotifGroupTime(
     val dateTime: LocalDateTime,
 )
 
-data class DbUsePattern(
+data class DbNotifTypes(
     @Embedded(prefix = "push") val push: DbNotifTypePush,
     @Embedded(prefix = "audio") val audio: DbNotifTypeAudio,
     @Embedded(prefix = "flashlight") val flashlight: DbNotifTypeFlashlight,
     @Embedded(prefix = "blinkingScreen") val blinkingScreen: DbNotifTypeBlinkingScreen
-)
+) {
+    fun toNotifTypes(): NotifTypes {
+        val notifTypes = NotifTypes(
+            NotifType.Push(push.isActive),
+            NotifType.Audio(audio.isActive),
+            NotifType.Flashlight(flashlight.isActive),
+            NotifType.BlinkingScreen(blinkingScreen.isActive),
+        )
+        return notifTypes
+    }
+}
+
+fun NotifTypes.toDbNotifTypes(): DbNotifTypes {
+    val dbNotifTypes = DbNotifTypes(
+        push = DbNotifTypePush(push.isActive),
+        audio = DbNotifTypeAudio(audio.isActive),
+        flashlight = DbNotifTypeFlashlight(flashlight.isActive),
+        blinkingScreen = DbNotifTypeBlinkingScreen(blinkingScreen.isActive),
+    )
+    return dbNotifTypes
+}
 
 data class DbNotifTypePush(
     val isActive: Boolean,

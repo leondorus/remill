@@ -15,6 +15,8 @@ import org.leondorus.remill.ui.screens.drug.DrugInfoDestination
 import org.leondorus.remill.ui.screens.drug.DrugInfoScreen
 import org.leondorus.remill.ui.screens.drugs.DrugsDestination
 import org.leondorus.remill.ui.screens.drugs.DrugsScreen
+import org.leondorus.remill.ui.screens.settings.SettingsDestination
+import org.leondorus.remill.ui.screens.settings.SettingsScreen
 
 @Composable
 fun RemillNavHost(
@@ -31,11 +33,9 @@ fun RemillNavHost(
                 navController.navigate("${DrugInfoDestination.route}/${id.id}")
             }, navigateToAddNewDrug = { navController.navigate(DrugAddDestination.route) })
         }
-
         composable(DrugAddDestination.route) {
             DrugAddScreen(goBack = { navController.popBackStack() })
         }
-
         composable(
             route = DrugInfoDestination.routeWithArgs,
             arguments = listOf(navArgument(DrugInfoDestination.itemIdArg) {
@@ -46,7 +46,6 @@ fun RemillNavHost(
                 navController.navigate("${DrugEditDestination.route}/${id.id}")
             })
         }
-
         composable(
             route = DrugEditDestination.routeWithArgs,
             arguments = listOf(navArgument(DrugEditDestination.itemIdArg) {
@@ -54,6 +53,12 @@ fun RemillNavHost(
             })
         ) {
             DrugEditScreen({ navController.popBackStack() })
+        }
+
+        composable(
+            route = SettingsDestination.route
+        ) {
+            SettingsScreen()
         }
     }
 }
