@@ -43,7 +43,7 @@ object AppViewModelProvider {
         }
 
         initializer {
-            SettingsViewModel()
+            SettingsViewModel(remillApplication().container.permissionManager)
         }
     }
 }

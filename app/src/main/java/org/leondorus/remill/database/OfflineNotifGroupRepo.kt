@@ -2,6 +2,7 @@ package org.leondorus.remill.database
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import org.leondorus.remill.domain.model.DrugId
 import org.leondorus.remill.domain.model.NotifGroup
 import org.leondorus.remill.domain.model.NotifGroupId

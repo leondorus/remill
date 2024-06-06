@@ -35,7 +35,12 @@ data class DbNotifTypes(
 ) {
     fun toNotifTypes(): NotifTypes {
         val notifTypes = NotifTypes(
-            NotifType.Push(push.isActive),
+            NotifType.Push(
+                isActive = push.isActive,
+                notificationTitle = push.notificationTitle,
+                notificationText = push.notificationText,
+                notificationIcon = push.notificationIcon
+            ),
             NotifType.Audio(audio.isActive),
             NotifType.Flashlight(flashlight.isActive),
             NotifType.BlinkingScreen(blinkingScreen.isActive),
@@ -46,7 +51,12 @@ data class DbNotifTypes(
 
 fun NotifTypes.toDbNotifTypes(): DbNotifTypes {
     val dbNotifTypes = DbNotifTypes(
-        push = DbNotifTypePush(push.isActive),
+        push = DbNotifTypePush(
+            isActive = push.isActive,
+            notificationTitle = push.notificationTitle,
+            notificationText = push.notificationText,
+            notificationIcon = push.notificationIcon
+        ),
         audio = DbNotifTypeAudio(audio.isActive),
         flashlight = DbNotifTypeFlashlight(flashlight.isActive),
         blinkingScreen = DbNotifTypeBlinkingScreen(blinkingScreen.isActive),
@@ -56,6 +66,9 @@ fun NotifTypes.toDbNotifTypes(): DbNotifTypes {
 
 data class DbNotifTypePush(
     val isActive: Boolean,
+    val notificationTitle: String,
+    val notificationText: String,
+    val notificationIcon: Int
 )
 
 data class DbNotifTypeAudio(

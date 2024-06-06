@@ -5,7 +5,8 @@ import java.time.LocalDateTime
 data class PlatformNotification(
     val id: PlatformNotificationId,
     val dateTime: LocalDateTime,
-    val notifTypes: NotifTypes
+    val notifTypes: NotifTypes,
+    val notifGroupId: NotifGroupId
 )
 
 

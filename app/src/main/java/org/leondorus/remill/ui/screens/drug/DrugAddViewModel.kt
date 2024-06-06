@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import org.leondorus.remill.R
 import org.leondorus.remill.domain.drugs.DrugEditUseCase
 import org.leondorus.remill.domain.model.NotifType
 import org.leondorus.remill.domain.model.NotifTypes
@@ -13,7 +14,10 @@ import org.leondorus.remill.domain.model.UsePattern
 import org.leondorus.remill.domain.notifgroups.NotifGroupEditUseCase
 import java.time.LocalDateTime
 
-class DrugAddViewModel(private val drugEditUseCase: DrugEditUseCase, private val notifGroupEditUseCase: NotifGroupEditUseCase) : ViewModel() {
+class DrugAddViewModel(
+    private val drugEditUseCase: DrugEditUseCase,
+    private val notifGroupEditUseCase: NotifGroupEditUseCase,
+) : ViewModel() {
     private val _uiState = MutableStateFlow(DrugAddUiState("", false, "", emptyList()))
     val uiState: StateFlow<DrugAddUiState>
         get() = _uiState.asStateFlow()
@@ -21,9 +25,20 @@ class DrugAddViewModel(private val drugEditUseCase: DrugEditUseCase, private val
     suspend fun saveCurDrug() {
         val drug = drugEditUseCase.addDrug(_uiState.value.drugName)
 
-        val notifTypes = NotifTypes(push = NotifType.Push(true))
+        val notifTypes = NotifTypes(
+            push = NotifType.Push(
+                true,
+                notificationTitle = "Take ${drug.name}!",
+                notificationText = "It's time to take your drug: ${drug.name}",
+                notificationIcon = R.drawable.notification_icon
+            ),
+            audio = NotifType.Audio(false),
+            flashlight = NotifType.Flashlight(false),
+            blinkingScreen = NotifType.BlinkingScreen(false)
+        )
         val usePattern = UsePattern(Schedule(_uiState.value.times), notifTypes)
-        val notifGroup = notifGroupEditUseCase.addNotifGroup(_uiState.value.notifGroupName, usePattern)
+        val notifGroup =
+            notifGroupEditUseCase.addNotifGroup(_uiState.value.notifGroupName, usePattern)
 
         val newDrug = drug.copy(notifGroupId = notifGroup.id)
         drugEditUseCase.updateDrug(newDrug)
@@ -41,6 +56,7 @@ class DrugAddViewModel(private val drugEditUseCase: DrugEditUseCase, private val
         val newTimes = (_uiState.value.times + time).sorted()
         _uiState.update { uiState -> uiState.copy(times = newTimes) }
     }
+
     fun deleteNotifTime(time: LocalDateTime) {
         val newTimes = _uiState.value.times.filter { it != time }
         _uiState.update { uiState -> uiState.copy(times = newTimes) }
@@ -59,5 +75,5 @@ data class DrugAddUiState(
     val drugName: String,
     val isDialogShown: Boolean,
     val notifGroupName: String,
-    val times: List<LocalDateTime>
+    val times: List<LocalDateTime>,
 )

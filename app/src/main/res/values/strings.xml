@@ -14,4 +14,7 @@
     <string name="notifgroup_name">Notifgroup name</string>
     <string name="add_new_time">Add new time</string>
     <string name="settings_title">Settings</string>
+    <string name="drug_reminder_channel_name">Drug reminders</string>
+    <string name="drug_reminder_channel_description">Notifications in this channel are reminders for taking your drugs</string>
+    <string name="request_notification_permissions">Request notification permissions</string>
 </resources>

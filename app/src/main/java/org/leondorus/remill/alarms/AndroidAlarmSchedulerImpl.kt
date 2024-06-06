@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_IMMUTABLE
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
 import org.leondorus.remill.domain.model.NotifTypes
@@ -28,10 +29,13 @@ class AndroidAlarmSchedulerImpl(private val context: Context): AndroidAlarmSched
     private fun generatePendingIntent(id: PlatformNotificationId, notifTypes: NotifTypes? = null): PendingIntent {
         val intent = Intent(context, AlarmReceiver::class.java).apply {
             action = INTENT_ACTION
-            if (notifTypes != null)
+            if (notifTypes != null) {
+                putExtra(AlarmIntentExtraKeys.PLATFORM_NOTIFICATION_ID, id.id)
                 putExtra(AlarmIntentExtraKeys.NOTIF_TYPES, notifTypes)
+            }
+
         }
-        val pendingIntent = PendingIntent.getBroadcast(context, id.id, intent, FLAG_IMMUTABLE)
+        val pendingIntent = PendingIntent.getBroadcast(context, id.id, intent, FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT)
 
         return pendingIntent
     }

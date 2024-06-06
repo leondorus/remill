@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 2,
-    "identityHash": "1d51f08902bfafcf48d455b2f3ad3077",
+    "version": 5,
+    "identityHash": "e67f024e922be507c00026016620178b",
     "entities": [
       {
         "tableName": "DbDrug",
@@ -60,7 +60,7 @@
       },
       {
         "tableName": "DbNotifGroup",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `pushisActive` INTEGER NOT NULL, `audioisActive` INTEGER NOT NULL, `flashlightisActive` INTEGER NOT NULL, `blinkingScreenisActive` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `pushisActive` INTEGER NOT NULL, `pushnotificationTitle` TEXT NOT NULL, `pushnotificationText` TEXT NOT NULL, `pushnotificationIcon` INTEGER NOT NULL, `audioisActive` INTEGER NOT NULL, `flashlightisActive` INTEGER NOT NULL, `blinkingScreenisActive` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -77,6 +77,24 @@
           {
             "fieldPath": "notifTypes.push.isActive",
             "columnName": "pushisActive",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "notifTypes.push.notificationTitle",
+            "columnName": "pushnotificationTitle",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "notifTypes.push.notificationText",
+            "columnName": "pushnotificationText",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "notifTypes.push.notificationIcon",
+            "columnName": "pushnotificationIcon",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -149,7 +167,7 @@
       },
       {
         "tableName": "DbPlatformNotification",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `dateTime` INTEGER NOT NULL, `pushisActive` INTEGER NOT NULL, `audioisActive` INTEGER NOT NULL, `flashlightisActive` INTEGER NOT NULL, `blinkingScreenisActive` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `dateTime` INTEGER NOT NULL, `notifGroupId` INTEGER NOT NULL, `pushisActive` INTEGER NOT NULL, `pushnotificationTitle` TEXT NOT NULL, `pushnotificationText` TEXT NOT NULL, `pushnotificationIcon` INTEGER NOT NULL, `audioisActive` INTEGER NOT NULL, `flashlightisActive` INTEGER NOT NULL, `blinkingScreenisActive` INTEGER NOT NULL, FOREIGN KEY(`notifGroupId`) REFERENCES `DbNotifGroup`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "id",
@@ -164,8 +182,32 @@
             "notNull": true
           },
           {
+            "fieldPath": "notifGroupId",
+            "columnName": "notifGroupId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
             "fieldPath": "notifTypes.push.isActive",
             "columnName": "pushisActive",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "notifTypes.push.notificationTitle",
+            "columnName": "pushnotificationTitle",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "notifTypes.push.notificationText",
+            "columnName": "pushnotificationText",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "notifTypes.push.notificationIcon",
+            "columnName": "pushnotificationIcon",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -205,13 +247,25 @@
             "createSql": "CREATE INDEX IF NOT EXISTS `index_DbPlatformNotification_dateTime` ON `${TABLE_NAME}` (`dateTime`)"
           }
         ],
-        "foreignKeys": []
+        "foreignKeys": [
+          {
+            "table": "DbNotifGroup",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "notifGroupId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1d51f08902bfafcf48d455b2f3ad3077')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e67f024e922be507c00026016620178b')"
     ]
   }
 }

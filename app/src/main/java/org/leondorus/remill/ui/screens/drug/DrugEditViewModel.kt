@@ -62,6 +62,7 @@ class DrugEditViewModel(savedStateHandle: SavedStateHandle, drugGetUseCase: Drug
             Log.e(TAG, "Drug or notif group is null for drugId $drugId")
             return
         }
+        Log.d(TAG, notifGroup.usePattern.notifTypes.toString())
         val usePattern = UsePattern(Schedule(uiState.value.times), notifGroup.usePattern.notifTypes)
         val notifGroup = NotifGroup(notifGroup.id, _uiState.value.notifGroupName, usePattern, emptyList())
         notifGroupEditUseCase.updateNotifGroup(notifGroup)

@@ -8,6 +8,7 @@ import org.leondorus.remill.database.DbPlatformNotification
 import org.leondorus.remill.database.DbPlatformNotificationDao
 import org.leondorus.remill.database.toDbNotifTypes
 import org.leondorus.remill.database.toDbPlatformNotification
+import org.leondorus.remill.domain.model.NotifGroupId
 import org.leondorus.remill.domain.model.NotifType
 import org.leondorus.remill.domain.model.NotifTypes
 import org.leondorus.remill.domain.model.PlatformNotification
@@ -23,15 +24,16 @@ class AndroidAlarmRepo(
     override suspend fun addPlatformNotification(
         dateTime: LocalDateTime,
         notifTypes: NotifTypes,
+        notifGroupId: NotifGroupId
     ): PlatformNotification {
         val dbPlatformNotification =
-            DbPlatformNotification(dateTime = dateTime, notifTypes = notifTypes.toDbNotifTypes())
+            DbPlatformNotification(dateTime = dateTime, notifTypes = notifTypes.toDbNotifTypes(), notifGroupId = notifGroupId.id)
         val id = PlatformNotificationId(
             dbPlatformNotificationDao.insertPlatformNotification(dbPlatformNotification).toInt()
         )
         androidAlarmScheduler.addAlarm(id, dateTime, notifTypes)
 
-        val platformNotification = PlatformNotification(id, dateTime, notifTypes)
+        val platformNotification = PlatformNotification(id, dateTime, notifTypes, notifGroupId)
         return platformNotification
     }
 
@@ -49,6 +51,10 @@ class AndroidAlarmRepo(
         androidAlarmScheduler.deleteAlarm(id)
     }
 
+    override suspend fun deleteAllPlatformNotificationsWithNotifGroup(notifGroupId: NotifGroupId) {
+        dbPlatformNotificationDao.deleteAllPlatformNotificationWithNotifGroupId(notifGroupId.id)
+    }
+
     override fun getPlatformNotification(id: PlatformNotificationId): Flow<PlatformNotification?> {
         return dbPlatformNotificationDao.getPlatformNotification(id.id).map {
             it?.toPlatformNotification()
@@ -58,6 +64,12 @@ class AndroidAlarmRepo(
     override fun getAllPlatformNotification(): Flow<List<PlatformNotification>> {
         return dbPlatformNotificationDao.getAllPlatformNotifications().map { list ->
             list.map { it.toPlatformNotification() }
+        }
+    }
+
+    override fun getPlatformNotificationByTime(localDateTime: LocalDateTime): Flow<PlatformNotification?> {
+        return dbPlatformNotificationDao.getPlatformNotificationByTime(localDateTime).map {
+            it?.toPlatformNotification()
         }
     }
 }

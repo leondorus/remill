@@ -2,6 +2,7 @@ package org.leondorus.remill.domain.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import org.leondorus.remill.R
 
 data class UsePattern(
     val schedule: Schedule,
@@ -9,21 +10,34 @@ data class UsePattern(
 )
 
 
+//@Parcelize
+//data class NotifTypes(
+//    val push: NotifType.Push = NotifType.Push(false, "", "//", R.drawable.notification_icon),
+//    val audio: NotifType.Audio = NotifType.Audio(false),
+//    val flashlight: NotifType.Flashlight = NotifType.Flashlight(false),
+//    val blinkingScreen: NotifType.BlinkingScreen = NotifType.BlinkingScreen(false)
+//): Parcelable
+
 @Parcelize
 data class NotifTypes(
-    val push: NotifType.Push = NotifType.Push(),
-    val audio: NotifType.Audio = NotifType.Audio(),
-    val flashlight: NotifType.Flashlight = NotifType.Flashlight(),
-    val blinkingScreen: NotifType.BlinkingScreen = NotifType.BlinkingScreen()
+    val push: NotifType.Push,
+    val audio: NotifType.Audio,
+    val flashlight: NotifType.Flashlight,
+    val blinkingScreen: NotifType.BlinkingScreen
 ): Parcelable
 
-sealed class NotifType(open val isActive: Boolean = false) {
+sealed class NotifType(open val isActive: Boolean) {
     @Parcelize
-    class Push(override val isActive: Boolean = false) : NotifType(), Parcelable
+    data class Push(
+        override val isActive: Boolean,
+        val notificationTitle: String,
+        val notificationText: String,
+        val notificationIcon: Int
+    ) : NotifType(isActive), Parcelable
     @Parcelize
-    class Audio(override val isActive: Boolean = false) : NotifType(), Parcelable
+    data class Audio(override val isActive: Boolean) : NotifType(isActive), Parcelable
     @Parcelize
-    class Flashlight(override val isActive: Boolean = false) : NotifType(), Parcelable
+    data class Flashlight(override val isActive: Boolean) : NotifType(isActive), Parcelable
     @Parcelize
-    class BlinkingScreen(override val isActive: Boolean = false) : NotifType(), Parcelable
+    data class BlinkingScreen(override val isActive: Boolean) : NotifType(isActive), Parcelable
 }
