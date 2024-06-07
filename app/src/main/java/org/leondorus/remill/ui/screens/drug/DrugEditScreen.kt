@@ -39,6 +39,11 @@ fun DrugEditScreen(
         onDialogAdd = { viewModel.addNotifTime(it); viewModel.dismissDialog() },
         onStartNewDialog = { viewModel.showDialog() },
         onDialogDismiss = { viewModel.dismissDialog() },
+
+        finalUri = uiState.photoPath,
+        hasImage = uiState.hasImage,
+        onPhotoResult = { viewModel.photoResultCallback(it) },
+        genNewFinalUri = {viewModel.genNewUri(it)},
         modifier = modifier
     )
 }

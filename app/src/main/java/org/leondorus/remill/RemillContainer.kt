@@ -23,6 +23,7 @@ interface RemillContainer {
     val fullDrugIntoUseCase: FullDrugInfoUseCase
     val permissionManager: PermissionManager
     val androidBluetoothWrapper: AndroidBluetoothWrapper?
+    val fileProvider: RemillFileProvider
 }
 
 class AndroidRemillContainer(context: Context) : RemillContainer {
@@ -32,6 +33,7 @@ class AndroidRemillContainer(context: Context) : RemillContainer {
     override val notifGroupEditUseCase: NotifGroupEditUseCase
     override val fullDrugIntoUseCase: FullDrugInfoUseCase
     override val permissionManager: PermissionManager = ActivityPermissionManager(context)
+    override val fileProvider: RemillFileProvider = RemillFileProvider()
     override val androidBluetoothWrapper: AndroidBluetoothWrapper? = context.getSystemService(BluetoothManager::class.java).let { manager ->
         val adapter = manager.adapter ?: return@let null
         AndroidBluetoothWrapper(adapter)

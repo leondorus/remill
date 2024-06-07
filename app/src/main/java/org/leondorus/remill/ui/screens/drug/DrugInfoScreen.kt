@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -24,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import org.leondorus.remill.R
 import org.leondorus.remill.domain.model.DrugId
 import org.leondorus.remill.ui.AppViewModelProvider
@@ -58,7 +60,11 @@ fun DrugInfoScreen(
 
             NotifGroupViewWidget(notifGroupName = drugInfoUiState.notifGroupName, times = drugInfoUiState.times)
             if (photoPath != null) {
-//                Image(bitmap = , contentDescription = )
+                AsyncImage(
+                    model = photoPath,
+                    modifier = Modifier.fillMaxWidth(),
+                    contentDescription = "Selected image",
+                )
             }
         }
     }

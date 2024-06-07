@@ -29,30 +29,26 @@ import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.core.content.FileProvider
 import coil.compose.AsyncImage
+import coil.request.CachePolicy
+import coil.request.ImageRequest
 import kotlinx.coroutines.launch
 import org.leondorus.remill.R
-import org.leondorus.remill.domain.model.DrugId
 import org.leondorus.remill.ui.AppViewModelProvider
-import java.io.File
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneOffset.UTC
-import java.util.UUID
 
 @Composable
 fun DrugAddScreen(
@@ -67,18 +63,18 @@ fun DrugAddScreen(
 
     DrugAddBody(
         onSaveButtonClick = {
-        coroutineScope.launch {
-            viewModel.saveCurDrug()
-            goBack()
-        }
-    },
+            coroutineScope.launch {
+                viewModel.saveCurDrug()
+                goBack()
+            }
+        },
         onCancelButtonClick = goBack,
 
         drugName = uiState.drugName,
         onDrugNameUpdate = { viewModel.updateDrugName(it) },
 
         notifGroupName = uiState.notifGroupName,
-        onNotifGroupNameChange = {viewModel.updateNotifGroupName(it)},
+        onNotifGroupNameChange = { viewModel.updateNotifGroupName(it) },
         notifGroupTimes = uiState.times,
         onNotifTimeDelete = { viewModel.deleteNotifTime(it) },
 
@@ -86,24 +82,38 @@ fun DrugAddScreen(
         onStartNewDialog = { viewModel.showDialog() },
         onDialogDismiss = { viewModel.dismissDialog() },
         onDialogAdd = { viewModel.addNotifTime(it); viewModel.dismissDialog() },
+
+        finalUri = uiState.photoUri,
+        hasImage = uiState.hasImage,
+        onPhotoResult = { viewModel.photoResultCallback(it) },
+        genNewFinalUri = { viewModel.genNewUri(it) },
+
         modifier = modifier
     )
 }
 
 @Composable
 fun DrugAddBody(
-    onCancelButtonClick: () -> Unit,
     onSaveButtonClick: () -> Unit,
+    onCancelButtonClick: () -> Unit,
+
     drugName: String,
     onDrugNameUpdate: (String) -> Unit,
+
     notifGroupName: String,
     onNotifGroupNameChange: (String) -> Unit,
     notifGroupTimes: List<LocalDateTime>,
     onNotifTimeDelete: (LocalDateTime) -> Unit,
+
     isDialogShown: Boolean,
     onStartNewDialog: () -> Unit,
     onDialogDismiss: () -> Unit,
     onDialogAdd: (LocalDateTime) -> Unit,
+
+    finalUri: Uri?,
+    hasImage: Boolean,
+    onPhotoResult: (Boolean) -> Unit,
+    genNewFinalUri: (Context) -> Uri,
     modifier: Modifier = Modifier,
 ) {
     if (isDialogShown) {
@@ -121,6 +131,13 @@ fun DrugAddBody(
             onValueChange = onDrugNameUpdate,
             label = { Text(stringResource(R.string.drug_name)) },
             modifier = Modifier.fillMaxWidth()
+        )
+
+        ImagePicker(
+            finalUri = finalUri,
+            hasImage = hasImage,
+            onResultCallback = onPhotoResult,
+            genNewFinalUri
         )
 
         NotifGroupAddWidget(
@@ -158,8 +175,7 @@ fun NotifGroupAddWidget(
 ) {
     Card(modifier = modifier) {
         Column {
-            OutlinedTextField(
-                value = notifGroupName,
+            OutlinedTextField(value = notifGroupName,
                 onValueChange = onNotifGroupNameChange,
                 label = { Text(stringResource(R.string.notifgroup_name)) })
 
@@ -167,7 +183,7 @@ fun NotifGroupAddWidget(
 
             LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 items(times) {
-                    Row (modifier = Modifier.fillMaxWidth()) {
+                    Row(modifier = Modifier.fillMaxWidth()) {
                         Text(it.toString())
                         Button(onClick = { onNotifTimeDelete(it) }) {
                             Text(stringResource(R.string.delete_this_notification))
@@ -194,10 +210,10 @@ fun AddNewDateTimeDialog(
     val currentTime = LocalDateTime.now()
     val datePickerState = rememberDatePickerState(
         initialSelectedDateMillis = currentTime.toEpochSecond(UTC) * 1000,
-        initialDisplayMode = DisplayMode.Input)
+        initialDisplayMode = DisplayMode.Input
+    )
     val timePickerState = rememberTimePickerState(
-        initialHour = currentTime.hour,
-        initialMinute = currentTime.minute
+        initialHour = currentTime.hour, initialMinute = currentTime.minute
     )
 
     val curLocalDate: LocalDate?
@@ -209,9 +225,16 @@ fun AddNewDateTimeDialog(
 
     val curLocalDateTime: LocalDateTime? = curLocalDate?.atTime(curLocalTime)
 
-    Dialog(onDismissRequest = onCancel, DialogProperties( usePlatformDefaultWidth = false )) {
-        Card(modifier = modifier.padding(8.dp).fillMaxWidth()) {
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+    Dialog(onDismissRequest = onCancel, DialogProperties(usePlatformDefaultWidth = false)) {
+        Card(
+            modifier = modifier
+                .padding(8.dp)
+                .fillMaxWidth()
+        ) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 DatePicker(datePickerState)
                 TimeInput(timePickerState)
                 Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -229,53 +252,22 @@ fun AddNewDateTimeDialog(
     }
 }
 
-class ComposeFileProvider : FileProvider(
-) {
-    companion object {
-        fun getImageUri(context: Context, fileName: String): Uri {
-            val directory = File(context.filesDir, "images")
-            directory.mkdirs()
-            val file = File.createTempFile(
-                "drug_image_" + UUID.randomUUID(),
-                ".jpg",
-                directory,
-            )
-            val authority = context.packageName + ".fileprovider"
-            return getUriForFile(
-                context,
-                authority,
-                file,
-            )
-        }
-    }
-}
-
 @Composable
 fun ImagePicker(
-    finalUri: Uri,
+    finalUri: Uri?,
+    hasImage: Boolean,
+    onResultCallback: (Boolean) -> Unit,
+    genNewFinalUri: (Context) -> Uri,
     modifier: Modifier = Modifier,
 ) {
-    var hasImage by remember { mutableStateOf(false) }
-    var imageUri by remember { mutableStateOf<Uri?>(null) }
-
-    val cameraLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.TakePicture(),
-        onResult = { success ->
-            hasImage = success
-        }
-    )
-
+    val cameraLauncher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.TakePicture(),
+            onResult = { success -> onResultCallback(success) })
     val context = LocalContext.current
-    Box(
-        modifier = modifier,
-    ) {
-        if (hasImage && imageUri != null) {
-            AsyncImage(
-                model = imageUri,
-                modifier = Modifier.fillMaxWidth(),
-                contentDescription = "Selected image",
-            )
-        }
+
+    Box(modifier = modifier) {
+        RecomposingAsyncImage(hasImage = hasImage, finalUri = finalUri)
+
         Column(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
@@ -285,14 +277,31 @@ fun ImagePicker(
             Button(
                 modifier = Modifier.padding(top = 16.dp),
                 onClick = {
-                    imageUri = finalUri
-                    cameraLauncher.launch(finalUri)
+                    val uri = finalUri ?: genNewFinalUri(context)
+                    cameraLauncher.launch(uri)
                 },
             ) {
-                Text(
-                    text = "Take photo"
-                )
+                Text(text = "Take photo")
             }
         }
+    }
+}
+
+@Composable
+fun RecomposingAsyncImage(
+    hasImage: Boolean,
+    finalUri: Uri?
+) {
+    if (hasImage && finalUri != null) {
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(finalUri)
+                .diskCachePolicy(CachePolicy.DISABLED)
+                .memoryCachePolicy(CachePolicy.DISABLED)
+                .crossfade(true)
+                .build(),
+            modifier = Modifier.fillMaxWidth(),
+            contentDescription = "Selected image",
+        )
     }
 }

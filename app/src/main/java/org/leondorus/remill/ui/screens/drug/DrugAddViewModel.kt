@@ -1,8 +1,9 @@
 package org.leondorus.remill.ui.screens.drug
 
 import android.app.Application
+import android.content.Context
 import android.net.Uri
-import androidx.camera.core.ImageCapture
+import androidx.core.net.toFile
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,27 +11,23 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import org.leondorus.remill.R
-import org.leondorus.remill.RemillApplication
+import org.leondorus.remill.RemillFileProvider
 import org.leondorus.remill.domain.drugs.DrugEditUseCase
 import org.leondorus.remill.domain.model.NotifType
 import org.leondorus.remill.domain.model.NotifTypes
 import org.leondorus.remill.domain.model.Schedule
 import org.leondorus.remill.domain.model.UsePattern
 import org.leondorus.remill.domain.notifgroups.NotifGroupEditUseCase
-import java.io.File
 import java.time.LocalDateTime
-import java.util.UUID
 
 class DrugAddViewModel(
     private val drugEditUseCase: DrugEditUseCase,
     private val notifGroupEditUseCase: NotifGroupEditUseCase,
-    application: Application,
-) : AndroidViewModel(application) {
-    private val _uiState = MutableStateFlow(DrugAddUiState("", false, "", emptyList()))
+    private val fileProvider: RemillFileProvider,
+) : ViewModel() {
+    private val _uiState = MutableStateFlow(DrugAddUiState("", false, "", emptyList(), false, null))
     val uiState: StateFlow<DrugAddUiState>
         get() = _uiState.asStateFlow()
-
-    private var photoPath: Uri? = null
 
     suspend fun saveCurDrug() {
         val drug = drugEditUseCase.addDrug(_uiState.value.drugName)
@@ -50,7 +47,7 @@ class DrugAddViewModel(
         val notifGroup =
             notifGroupEditUseCase.addNotifGroup(_uiState.value.notifGroupName, usePattern)
 
-        val newDrug = drug.copy(notifGroupId = notifGroup.id)
+        val newDrug = drug.copy(notifGroupId = notifGroup.id, photoPath = _uiState.value.photoUri)
         drugEditUseCase.updateDrug(newDrug)
     }
 
@@ -80,7 +77,14 @@ class DrugAddViewModel(
         _uiState.update { uiState -> uiState.copy(isDialogShown = false) }
     }
 
-    fun takePhoto() {
+    fun photoResultCallback(success: Boolean) {
+        _uiState.update { uiState -> uiState.copy(hasImage = success) }
+    }
+
+    fun genNewUri(context: Context): Uri {
+        val tempUri = fileProvider.getNewUri(context)
+        _uiState.update { uiState -> uiState.copy(photoUri = tempUri) }
+        return tempUri
     }
 }
 
@@ -89,4 +93,6 @@ data class DrugAddUiState(
     val isDialogShown: Boolean,
     val notifGroupName: String,
     val times: List<LocalDateTime>,
+    val hasImage: Boolean,
+    val photoUri: Uri?
 )

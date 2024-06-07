@@ -76,12 +76,13 @@ class OfflineNotifGroupRepo(private val notifGroupDao: DbNotifGroupDao) : NotifG
         val flowWithDrugs = notifGroupDao.getNotifGroupWithDrugs(id.id)
         val flowWithTimes = notifGroupDao.getNotifGroupWithTimes(id.id)
         return combine(flowWithTimes, flowWithDrugs) { mapWithTimes, mapWithDrugs ->
-            val dbNotifGroup = mapWithTimes.keys.firstOrNull() ?: return@combine null
-            mapWithDrugs.keys.firstOrNull() ?: return@combine null
-            // TODO(they may be different)
+            val dbNotifGroupFromTimes = mapWithTimes.keys.firstOrNull()
+            val dbNotifGroupFromDrugs = mapWithDrugs.keys.firstOrNull()
+
+            val dbNotifGroup = dbNotifGroupFromTimes ?: dbNotifGroupFromDrugs ?: return@combine null
 
             val drugIds = mapWithDrugs.values.first().map { DrugId(it) }
-            val times = mapWithTimes.values.first()
+            val times = mapWithTimes.values.firstOrNull() ?: emptyList()
 
             val usePattern = dbToUsePattern(times, dbNotifGroup.notifTypes)
             val notifGroup = NotifGroup(NotifGroupId(dbNotifGroup.id), dbNotifGroup.name, usePattern, drugIds)

@@ -35,7 +35,8 @@ object AppViewModelProvider {
         initializer {
             DrugAddViewModel(
                 remillApplication().container.drugEditUseCase,
-                remillApplication().container.notifGroupEditUseCase
+                remillApplication().container.notifGroupEditUseCase,
+                remillApplication().container.fileProvider,
             )
         }
         initializer {
@@ -45,6 +46,7 @@ object AppViewModelProvider {
                 remillApplication().container.drugEditUseCase,
                 remillApplication().container.notifGroupGetUseCase,
                 remillApplication().container.notifGroupEditUseCase,
+                remillApplication().container.fileProvider,
             )
         }
 
