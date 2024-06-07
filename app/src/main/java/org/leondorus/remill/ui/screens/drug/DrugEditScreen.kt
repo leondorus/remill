@@ -44,6 +44,9 @@ fun DrugEditScreen(
         hasImage = uiState.hasImage,
         onPhotoResult = { viewModel.photoResultCallback(it) },
         genNewFinalUri = {viewModel.genNewUri(it)},
+
+        chosenSound = uiState.chosenSound,
+        onProposedSoundUpdate = {viewModel.onProposedSoundUpdate(it)},
         modifier = modifier
     )
 }

@@ -51,6 +51,7 @@ class FullDrugInfoUseCase(
                     emit(null)
                 }
             }
+            val newDrug = drug.copy(photoPath = null)
             val notifGroupId = drug.notifGroupId ?: return@flatMapLatest flow<FullDrugInfo> {
                 FullDrugInfo(
                     drug, null

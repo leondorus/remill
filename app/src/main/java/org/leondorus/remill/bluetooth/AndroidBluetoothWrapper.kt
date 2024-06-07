@@ -136,8 +136,9 @@ class AndroidBluetoothWrapper(private val bluetoothAdapter: BluetoothAdapter) {
             Log.d(TAG, "Receiving: final bytes: $resultBytes")
 
             val fullDrugInfo = ProtoBuf.decodeFromByteArray<FullDrugInfo>(resultBytes.toByteArray())
+            val fullDrugInfoWithoutPhoto = fullDrugInfo.copy(drug = fullDrugInfo.drug.copy(photoPath = null))
 
-            onReceive(fullDrugInfo)
+            onReceive(fullDrugInfoWithoutPhoto)
         }
     }
 

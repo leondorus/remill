@@ -1,5 +1,6 @@
 package org.leondorus.remill.domain.model
 
+import android.net.Uri
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
@@ -32,7 +33,9 @@ sealed class NotifType() {
     ) : NotifType(), Parcelable
     @Serializable
     @Parcelize
-    data class Audio(val isActive: Boolean) : NotifType(), Parcelable
+    data class Audio(val isActive: Boolean,
+        val audioUri: @Serializable(with = UriSerializer::class) Uri?
+    ) : NotifType(), Parcelable
     @Serializable
     @Parcelize
     data class Flashlight(val isActive: Boolean) : NotifType(), Parcelable

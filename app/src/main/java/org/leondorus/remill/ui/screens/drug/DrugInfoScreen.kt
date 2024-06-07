@@ -59,6 +59,7 @@ fun DrugInfoScreen(
             Text(text = stringResource(R.string.name_is_druginfo, drugInfoUiState.name))
 
             NotifGroupViewWidget(notifGroupName = drugInfoUiState.notifGroupName, times = drugInfoUiState.times)
+            Text("Proposed sound: %s".format(drugInfoUiState.proposedSound.title))
             if (photoPath != null) {
                 AsyncImage(
                     model = photoPath,

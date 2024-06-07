@@ -48,7 +48,7 @@ class AlarmReceiver : BroadcastReceiver() {
                 )
             }
             if (notifTypes.audio.isActive) {
-                setupAndPlaySound(context)
+                setupAndPlaySound(context, notifTypes.audio)
             }
         }
     }
@@ -76,9 +76,9 @@ class AlarmReceiver : BroadcastReceiver() {
         }
     }
 
-    private fun setupAndPlaySound(context: Context) {
-        mp = MediaPlayer.create(context, Settings.System.DEFAULT_ALARM_ALERT_URI)
-        mp.isLooping = false
+    private fun setupAndPlaySound(context: Context, audio: NotifType.Audio) {
+        mp = MediaPlayer.create(context, audio.audioUri)
+        mp.isLooping = true
         mp.start()
     }
 }

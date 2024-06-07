@@ -20,6 +20,7 @@ import org.leondorus.remill.domain.drugs.DrugGetUseCase
 import org.leondorus.remill.domain.model.Drug
 import org.leondorus.remill.domain.model.DrugId
 import org.leondorus.remill.domain.model.NotifGroup
+import org.leondorus.remill.domain.model.NotifType
 import org.leondorus.remill.domain.model.Schedule
 import org.leondorus.remill.domain.model.UsePattern
 import org.leondorus.remill.domain.notifgroups.NotifGroupEditUseCase
@@ -56,6 +57,14 @@ class DrugEditViewModel(
             }
 
             notifGroup = nullableNotifGroup
+            var proposedSound: ProposedSound = ProposedSound.None
+            for (cur in proposedSounds) {
+                if (cur.uri == notifGroup.usePattern.notifTypes.audio.audioUri) {
+                    proposedSound = cur
+                    break
+                }
+            }
+
             val drugName = drug.name
             val notifGroupName = notifGroup.name
             val times = notifGroup.usePattern.schedule.times
@@ -66,13 +75,14 @@ class DrugEditViewModel(
                 notifGroupName = notifGroupName,
                 times = times,
                 photoPath = photoUri,
-                hasImage = photoUri != null
+                hasImage = photoUri != null,
+                chosenSound = proposedSound
             )
         }
     }
 
     private val _uiState =
-        MutableStateFlow(DrugEditUiState("", false, "", false, null, emptyList()))
+        MutableStateFlow(DrugEditUiState("", false, "", false, null, emptyList(), ProposedSound.None))
     val uiState: StateFlow<DrugEditUiState>
         get() = _uiState.asStateFlow()
 
@@ -84,7 +94,11 @@ class DrugEditViewModel(
             return
         }
         Log.d(TAG, notifGroup.usePattern.notifTypes.toString())
-        val usePattern = UsePattern(Schedule(uiState.value.times), notifGroup.usePattern.notifTypes)
+
+        val chosenSound = uiState.value.chosenSound
+        val newNotifTypes = notifGroup.usePattern.notifTypes.copy(audio = NotifType.Audio(chosenSound != ProposedSound.None, chosenSound.uri))
+
+        val usePattern = UsePattern(Schedule(uiState.value.times), newNotifTypes)
         val notifGroup =
             NotifGroup(notifGroup.id, _uiState.value.notifGroupName, usePattern, emptyList())
         notifGroupEditUseCase.updateNotifGroup(notifGroup)
@@ -132,6 +146,10 @@ class DrugEditViewModel(
         _uiState.update { uiState -> uiState.copy(photoPath = tempUri) }
         return tempUri
     }
+
+    fun onProposedSoundUpdate(newSound: ProposedSound) {
+        _uiState.update { uiState -> uiState.copy(chosenSound = newSound) }
+    }
 }
 
 data class DrugEditUiState(
@@ -141,4 +159,5 @@ data class DrugEditUiState(
     val hasImage: Boolean,
     val photoPath: Uri?,
     val times: List<LocalDateTime>,
+    val chosenSound: ProposedSound
 )

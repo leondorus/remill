@@ -25,7 +25,7 @@ class DrugAddViewModel(
     private val notifGroupEditUseCase: NotifGroupEditUseCase,
     private val fileProvider: RemillFileProvider,
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(DrugAddUiState("", false, "", emptyList(), false, null))
+    private val _uiState = MutableStateFlow(DrugAddUiState("", false, "", emptyList(), false, null, chosenSound = ProposedSound.None))
     val uiState: StateFlow<DrugAddUiState>
         get() = _uiState.asStateFlow()
 
@@ -39,10 +39,11 @@ class DrugAddViewModel(
                 notificationText = "It's time to take your drug: ${drug.name}",
                 notificationIcon = R.drawable.notification_icon
             ),
-            audio = NotifType.Audio(false),
+            audio = NotifType.Audio(false, null),
             flashlight = NotifType.Flashlight(false),
             blinkingScreen = NotifType.BlinkingScreen(false)
         )
+        val newNotifTypes = notifTypes.copy(audio = NotifType.Audio(uiState.value.chosenSound != ProposedSound.None, uiState.value.chosenSound.uri))
         val usePattern = UsePattern(Schedule(_uiState.value.times), notifTypes)
         val notifGroup =
             notifGroupEditUseCase.addNotifGroup(_uiState.value.notifGroupName, usePattern)
@@ -86,6 +87,10 @@ class DrugAddViewModel(
         _uiState.update { uiState -> uiState.copy(photoUri = tempUri) }
         return tempUri
     }
+
+    fun onProposedSoundUpdate(newSound: ProposedSound) {
+        _uiState.update { uiState -> uiState.copy(chosenSound = newSound) }
+    }
 }
 
 data class DrugAddUiState(
@@ -94,5 +99,6 @@ data class DrugAddUiState(
     val notifGroupName: String,
     val times: List<LocalDateTime>,
     val hasImage: Boolean,
-    val photoUri: Uri?
+    val photoUri: Uri?,
+    val chosenSound: ProposedSound
 )

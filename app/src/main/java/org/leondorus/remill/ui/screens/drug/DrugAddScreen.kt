@@ -14,7 +14,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.DatePicker
@@ -22,6 +25,7 @@ import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TimeInput
 import androidx.compose.material3.rememberDatePickerState
@@ -29,6 +33,8 @@ import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -88,6 +94,8 @@ fun DrugAddScreen(
         onPhotoResult = { viewModel.photoResultCallback(it) },
         genNewFinalUri = { viewModel.genNewUri(it) },
 
+        chosenSound = uiState.chosenSound,
+        onProposedSoundUpdate = { viewModel.onProposedSoundUpdate(it) },
         modifier = modifier
     )
 }
@@ -114,17 +122,22 @@ fun DrugAddBody(
     hasImage: Boolean,
     onPhotoResult: (Boolean) -> Unit,
     genNewFinalUri: (Context) -> Uri,
+
+    chosenSound: ProposedSound,
+    onProposedSoundUpdate: (ProposedSound) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (isDialogShown) {
         AddNewDateTimeDialog(onAdd = { onDialogAdd(it) }, onCancel = { onDialogDismiss() })
     }
 
+    val scrollState = rememberScrollState()
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(8.dp),
-        verticalArrangement = Arrangement.SpaceBetween
+            .padding(8.dp)
+            .verticalScroll(scrollState),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         OutlinedTextField(
             value = drugName,
@@ -137,7 +150,7 @@ fun DrugAddBody(
             finalUri = finalUri,
             hasImage = hasImage,
             onResultCallback = onPhotoResult,
-            genNewFinalUri
+            genNewFinalUri,
         )
 
         NotifGroupAddWidget(
@@ -148,6 +161,8 @@ fun DrugAddBody(
             onStartNewDialog,
             modifier = Modifier.fillMaxWidth()
         )
+
+        MusicSelector(chosen = chosenSound, onClick = onProposedSoundUpdate)
 
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             OutlinedButton(
@@ -181,7 +196,7 @@ fun NotifGroupAddWidget(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            LazyRow(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                 items(times) {
                     Row(modifier = Modifier.fillMaxWidth()) {
                         Text(it.toString())
@@ -296,12 +311,25 @@ fun RecomposingAsyncImage(
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(finalUri)
-                .diskCachePolicy(CachePolicy.DISABLED)
-                .memoryCachePolicy(CachePolicy.DISABLED)
                 .crossfade(true)
                 .build(),
             modifier = Modifier.fillMaxWidth(),
             contentDescription = "Selected image",
         )
+    }
+}
+
+@Composable
+fun MusicSelector(chosen: ProposedSound, onClick: (ProposedSound) -> Unit, modifier: Modifier = Modifier) {
+    Card(modifier = modifier) {
+        Text(text = stringResource(R.string.choose_audio_sound))
+        LazyRow {
+            items(proposedSounds) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    RadioButton(selected = chosen == it, onClick = { onClick(it) })
+                    Text(it.title)
+                }
+            }
+        }
     }
 }

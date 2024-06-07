@@ -31,15 +31,23 @@ class DrugInfoViewModel(
                     notifGroupGetUseCase.getNotifGroup(notifGroupId).map { notifGroup ->
                         val notifGroupName = notifGroup?.name ?: ""
                         val times = notifGroup?.usePattern?.schedule?.times ?: emptyList()
-                        DrugInfoUiState(drug.name, notifGroupName, drug.photoPath.toString(), times)
+                        val soundUri = notifGroup?.usePattern?.notifTypes?.audio?.audioUri
+                        var proposedSound: ProposedSound = ProposedSound.None
+                        for (cur in proposedSounds) {
+                            if (cur.uri == soundUri) {
+                                proposedSound = cur
+                                break
+                            }
+                        }
+                        DrugInfoUiState(drug.name, notifGroupName, drug.photoPath.toString(), times, proposedSound)
                     }
                 } else {
-                    flow { DrugInfoUiState(drug.name, "", null, emptyList()) }
+                    flow { DrugInfoUiState(drug.name, "", null, emptyList(), ProposedSound.None) }
                 }
             }.stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-                initialValue = DrugInfoUiState("", "", null, listOf())
+                initialValue = DrugInfoUiState("", "", null, listOf(), ProposedSound.None)
             )
 
 
@@ -53,4 +61,5 @@ data class DrugInfoUiState(
     val notifGroupName: String,
     val photoPath: String?,
     val times: List<LocalDateTime>,
+    val proposedSound: ProposedSound
 )

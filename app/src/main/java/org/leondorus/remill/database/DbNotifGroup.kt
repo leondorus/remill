@@ -1,5 +1,6 @@
 package org.leondorus.remill.database
 
+import android.net.Uri
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
@@ -34,6 +35,7 @@ data class DbNotifTypes(
     @Embedded(prefix = "blinkingScreen") val blinkingScreen: DbNotifTypeBlinkingScreen
 ) {
     fun toNotifTypes(): NotifTypes {
+        val newAudioUri = if (audio.audioUri == null) null else Uri.parse(audio.audioUri)
         val notifTypes = NotifTypes(
             NotifType.Push(
                 isActive = push.isActive,
@@ -41,7 +43,7 @@ data class DbNotifTypes(
                 notificationText = push.notificationText,
                 notificationIcon = push.notificationIcon
             ),
-            NotifType.Audio(audio.isActive),
+            NotifType.Audio(audio.isActive, newAudioUri),
             NotifType.Flashlight(flashlight.isActive),
             NotifType.BlinkingScreen(blinkingScreen.isActive),
         )
@@ -57,7 +59,7 @@ fun NotifTypes.toDbNotifTypes(): DbNotifTypes {
             notificationText = push.notificationText,
             notificationIcon = push.notificationIcon
         ),
-        audio = DbNotifTypeAudio(audio.isActive),
+        audio = DbNotifTypeAudio(audio.isActive, audio.audioUri.toString()),
         flashlight = DbNotifTypeFlashlight(flashlight.isActive),
         blinkingScreen = DbNotifTypeBlinkingScreen(blinkingScreen.isActive),
     )
@@ -73,6 +75,7 @@ data class DbNotifTypePush(
 
 data class DbNotifTypeAudio(
     val isActive: Boolean,
+    val audioUri: String?
 )
 
 data class DbNotifTypeFlashlight(
