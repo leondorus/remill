@@ -33,7 +33,7 @@ fun DrugEditScreen(
         notifGroupName = uiState.notifGroupName,
         onNotifGroupNameChange = { viewModel.updateNotifGroupName(it) },
         notifGroupTimes = uiState.times,
-        onNotifTimeDelete = {viewModel.deleteNotifTime(it)},
+        onNotifTimeDelete = { viewModel.deleteNotifTime(it) },
 
         isDialogShown = uiState.isDialogShown,
         onDialogAdd = { viewModel.addNotifTime(it); viewModel.dismissDialog() },
@@ -43,10 +43,10 @@ fun DrugEditScreen(
         finalUri = uiState.photoPath,
         hasImage = uiState.hasImage,
         onPhotoResult = { viewModel.photoResultCallback(it) },
-        genNewFinalUri = {viewModel.genNewUri(it)},
+        genNewFinalUri = { viewModel.genNewUri(it) },
 
         chosenSound = uiState.chosenSound,
-        onProposedSoundUpdate = {viewModel.onProposedSoundUpdate(it)},
+        onProposedSoundUpdate = { viewModel.onProposedSoundUpdate(it) },
         modifier = modifier
     )
 }

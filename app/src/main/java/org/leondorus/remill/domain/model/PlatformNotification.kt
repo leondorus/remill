@@ -6,7 +6,7 @@ data class PlatformNotification(
     val id: PlatformNotificationId,
     val dateTime: LocalDateTime,
     val notifTypes: NotifTypes,
-    val notifGroupId: NotifGroupId
+    val notifGroupId: NotifGroupId,
 )
 
 

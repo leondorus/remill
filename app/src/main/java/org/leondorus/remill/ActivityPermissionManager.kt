@@ -8,7 +8,10 @@ class ActivityPermissionManager(private val context: Context) : PermissionManage
     private var permissionProvider: PermissionProvider? = null
 
     override fun checkPermissionGranted(permission: String): Boolean {
-        return ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
+        return ContextCompat.checkSelfPermission(
+            context,
+            permission
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     override fun requestPermissions(permissions: Array<String>) {

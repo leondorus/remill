@@ -32,7 +32,7 @@ data class DbNotifTypes(
     @Embedded(prefix = "push") val push: DbNotifTypePush,
     @Embedded(prefix = "audio") val audio: DbNotifTypeAudio,
     @Embedded(prefix = "flashlight") val flashlight: DbNotifTypeFlashlight,
-    @Embedded(prefix = "blinkingScreen") val blinkingScreen: DbNotifTypeBlinkingScreen
+    @Embedded(prefix = "blinkingScreen") val blinkingScreen: DbNotifTypeBlinkingScreen,
 ) {
     fun toNotifTypes(): NotifTypes {
         val newAudioUri = if (audio.audioUri == null) null else Uri.parse(audio.audioUri)
@@ -70,12 +70,12 @@ data class DbNotifTypePush(
     val isActive: Boolean,
     val notificationTitle: String,
     val notificationText: String,
-    val notificationIcon: Int
+    val notificationIcon: Int,
 )
 
 data class DbNotifTypeAudio(
     val isActive: Boolean,
-    val audioUri: String?
+    val audioUri: String?,
 )
 
 data class DbNotifTypeFlashlight(

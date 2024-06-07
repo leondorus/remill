@@ -39,18 +39,23 @@ fun SharingReceiveScreen(
                     Text(text = stringResource(R.string.sharing_receiving_make_discoverable))
                 }
             }
+
             SharingReceiveUiState.Connecting -> {
                 DecoratedText(stringResource(R.string.sharing_receiving_connecting))
             }
+
             SharingReceiveUiState.Receiving -> {
                 DecoratedText(stringResource(R.string.sharing_receiving_receiving))
             }
+
             is SharingReceiveUiState.UpdatingLocalDatabase -> {
                 DecoratedText(stringResource(R.string.sharing_receiving_update_local_database))
             }
+
             SharingReceiveUiState.Done -> {
                 DecoratedText(stringResource(R.string.sharing_receiving_done))
             }
+
             SharingReceiveUiState.NoBluetoothAvailable -> {
                 DecoratedText(text = stringResource(R.string.sharing_receiving_no_bluetooth_available))
             }

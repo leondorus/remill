@@ -1,10 +1,8 @@
 package org.leondorus.remill.database
 
 import androidx.room.TypeConverter
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 
 class LocalDateTimeConverter {
     @TypeConverter

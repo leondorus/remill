@@ -6,9 +6,12 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
-@Database(entities = [DbDrug::class, DbNotifGroup::class, DbNotifGroupTime::class, DbPlatformNotification::class], version = 9)
+@Database(
+    entities = [DbDrug::class, DbNotifGroup::class, DbNotifGroupTime::class, DbPlatformNotification::class],
+    version = 9
+)
 @TypeConverters(LocalDateTimeConverter::class)
-abstract class RemillDatabase: RoomDatabase() {
+abstract class RemillDatabase : RoomDatabase() {
     abstract fun drugDao(): DbDrugDao
     abstract fun notifGroupDao(): DbNotifGroupDao
     abstract fun platformNotificationDao(): DbPlatformNotificationDao
@@ -19,8 +22,10 @@ abstract class RemillDatabase: RoomDatabase() {
 
         fun getDatabase(applicationContext: Context): RemillDatabase {
             return Instance ?: synchronized(this) {
-                Room.databaseBuilder(applicationContext,
-                    RemillDatabase::class.java, "remill_database").fallbackToDestructiveMigration()
+                Room.databaseBuilder(
+                    applicationContext,
+                    RemillDatabase::class.java, "remill_database"
+                ).fallbackToDestructiveMigration()
                     .build()
                     .also { Instance = it }
             }

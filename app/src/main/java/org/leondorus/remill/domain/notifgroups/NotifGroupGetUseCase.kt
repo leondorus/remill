@@ -8,6 +8,7 @@ class NotifGroupGetUseCase(private val notifGroupGetRepo: NotifGroupGetRepo) {
     fun getNotifGroup(id: NotifGroupId): Flow<NotifGroup?> {
         return notifGroupGetRepo.getNotifGroup(id)
     }
+
     fun getAllNotifGroups(): Flow<List<NotifGroup>> {
         return notifGroupGetRepo.getAllNotifGroups()
     }

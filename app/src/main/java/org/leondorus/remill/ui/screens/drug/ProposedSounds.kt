@@ -7,11 +7,11 @@ sealed class ProposedSound(
     val uri: Uri?,
     val title: String,
 ) {
-    object None : ProposedSound(null, "No sound")
-    object Alarm : ProposedSound(Settings.System.DEFAULT_ALARM_ALERT_URI, "Alarm")
-    object Notification : ProposedSound(Settings.System.DEFAULT_NOTIFICATION_URI, "Notification")
+    data object None : ProposedSound(null, "No sound")
+    data object Alarm : ProposedSound(Settings.System.DEFAULT_ALARM_ALERT_URI, "Alarm")
+    data object Notification : ProposedSound(Settings.System.DEFAULT_NOTIFICATION_URI, "Notification")
 
-    object Ringtone : ProposedSound(Settings.System.DEFAULT_RINGTONE_URI, "Ringtone")
+    data object Ringtone : ProposedSound(Settings.System.DEFAULT_RINGTONE_URI, "Ringtone")
 }
 
 val proposedSounds: List<ProposedSound> = listOf(

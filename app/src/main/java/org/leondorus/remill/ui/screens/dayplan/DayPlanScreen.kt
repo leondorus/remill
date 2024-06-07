@@ -13,9 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,7 +26,6 @@ import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
 import org.leondorus.remill.ui.AppViewModelProvider
 import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.Month
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
@@ -53,7 +50,7 @@ fun DayPlanScreen(
 
     val selection = uiState.selectedDate
 
-    Column {
+    Column(modifier = modifier) {
         WeekCalendar(
             state = state,
             dayContent = { day ->

@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.leondorus.remill.bluetooth.AndroidBluetoothWrapper
 import org.leondorus.remill.domain.model.DrugId
@@ -26,9 +25,10 @@ class SharingSendViewModel(
     val uiState: StateFlow<SharingSendUiState>
         get() = _uiState.asStateFlow()
 
-    val devices: StateFlow<List<BluetoothDevice>> = androidBluetoothWrapper?.getAvailableFriends() ?: MutableStateFlow(
-        emptyList()
-    )
+    val devices: StateFlow<List<BluetoothDevice>> =
+        androidBluetoothWrapper?.getAvailableFriends() ?: MutableStateFlow(
+            emptyList()
+        )
 
     fun startSending(bluetoothDevice: BluetoothDevice) {
         viewModelScope.launch {
@@ -55,7 +55,7 @@ class SharingSendViewModel(
 }
 
 sealed interface SharingSendUiState {
-    object Initial: SharingSendUiState
-    object Sending: SharingSendUiState
-    object Done: SharingSendUiState
+    data object Initial : SharingSendUiState
+    data object Sending : SharingSendUiState
+    data object Done : SharingSendUiState
 }

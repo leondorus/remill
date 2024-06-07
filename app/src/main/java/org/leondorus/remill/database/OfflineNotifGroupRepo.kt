@@ -2,12 +2,9 @@ package org.leondorus.remill.database
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
 import org.leondorus.remill.domain.model.DrugId
 import org.leondorus.remill.domain.model.NotifGroup
 import org.leondorus.remill.domain.model.NotifGroupId
-import org.leondorus.remill.domain.model.NotifType
-import org.leondorus.remill.domain.model.NotifTypes
 import org.leondorus.remill.domain.model.Schedule
 import org.leondorus.remill.domain.model.UsePattern
 import org.leondorus.remill.domain.notifgroups.NotifGroupEditRepo
@@ -22,8 +19,11 @@ class OfflineNotifGroupRepo(private val notifGroupDao: DbNotifGroupDao) : NotifG
         return dbNotifTypes
     }
 
-    private fun usePatternToDbTimes(usePattern: UsePattern, notifGroupId: NotifGroupId): List<DbNotifGroupTime> {
-        val dbTimes = usePattern.schedule.times.map {  ldt ->
+    private fun usePatternToDbTimes(
+        usePattern: UsePattern,
+        notifGroupId: NotifGroupId,
+    ): List<DbNotifGroupTime> {
+        val dbTimes = usePattern.schedule.times.map { ldt ->
             DbNotifGroupTime(notifGroupId.id, ldt)
         }
         return dbTimes
@@ -85,7 +85,8 @@ class OfflineNotifGroupRepo(private val notifGroupDao: DbNotifGroupDao) : NotifG
             val times = mapWithTimes.values.firstOrNull() ?: emptyList()
 
             val usePattern = dbToUsePattern(times, dbNotifGroup.notifTypes)
-            val notifGroup = NotifGroup(NotifGroupId(dbNotifGroup.id), dbNotifGroup.name, usePattern, drugIds)
+            val notifGroup =
+                NotifGroup(NotifGroupId(dbNotifGroup.id), dbNotifGroup.name, usePattern, drugIds)
 
             notifGroup
         }
@@ -99,29 +100,32 @@ class OfflineNotifGroupRepo(private val notifGroupDao: DbNotifGroupDao) : NotifG
             val drugMapIds = mapWithDrugs.keys.map { it.id }.toSet()
             val commonIds = timeMapIds.intersect(drugMapIds)
 
-            val idMapWithTimes = mapWithTimes.filter { it.key.id in commonIds }.keys.associate { dbNotifGroup ->
-                val id = dbNotifGroup.id
-                val times = mapWithTimes[dbNotifGroup]!!
+            val idMapWithTimes =
+                mapWithTimes.filter { it.key.id in commonIds }.keys.associate { dbNotifGroup ->
+                    val id = dbNotifGroup.id
+                    val times = mapWithTimes[dbNotifGroup]!!
 
-                id to (dbNotifGroup to times)
-            }
-            val idMapWithDrugs = mapWithDrugs.filter { it.key.id in commonIds }.keys.associate { dbNotifGroup ->
-                val id = dbNotifGroup.id
-                val drugs = mapWithDrugs[dbNotifGroup]!!
+                    id to (dbNotifGroup to times)
+                }
+            val idMapWithDrugs =
+                mapWithDrugs.filter { it.key.id in commonIds }.keys.associate { dbNotifGroup ->
+                    val id = dbNotifGroup.id
+                    val drugs = mapWithDrugs[dbNotifGroup]!!
 
-                id to (dbNotifGroup to drugs)
-            }
-            val combinedMap = idMapWithDrugs.keys.intersect(idMapWithTimes.keys).associateWith { id ->
-                val dbNotifGroup = idMapWithTimes[id]!!.first 
-                val times = idMapWithTimes[id]!!.second
-                val drugs = idMapWithDrugs[id]!!.second
-                Triple(dbNotifGroup, times, drugs)
-            }
+                    id to (dbNotifGroup to drugs)
+                }
+            val combinedMap =
+                idMapWithDrugs.keys.intersect(idMapWithTimes.keys).associateWith { id ->
+                    val dbNotifGroup = idMapWithTimes[id]!!.first
+                    val times = idMapWithTimes[id]!!.second
+                    val drugs = idMapWithDrugs[id]!!.second
+                    Triple(dbNotifGroup, times, drugs)
+                }
 
             val notifGroups = combinedMap.map { entry ->
                 val dbNotifGroup = entry.value.first
                 val times = entry.value.second
-                val drugIds = entry.value.third.map {DrugId(it)}
+                val drugIds = entry.value.third.map { DrugId(it) }
 
                 val usePattern = dbToUsePattern(times, dbNotifGroup.notifTypes)
 
@@ -129,7 +133,7 @@ class OfflineNotifGroupRepo(private val notifGroupDao: DbNotifGroupDao) : NotifG
                 val notifGroup = NotifGroup(notifGroupId, dbNotifGroup.name, usePattern, drugIds)
                 notifGroup
             }
-            
+
             notifGroups
         }
     }

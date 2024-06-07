@@ -12,7 +12,7 @@ import org.leondorus.remill.ui.navigation.RemillNavHost
 @Composable
 fun RemillApp(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
 ) {
     Scaffold(
         modifier = modifier,

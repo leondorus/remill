@@ -42,8 +42,14 @@ fun SharingSendScreen(
                 }
             }
         }
-        SharingSendUiState.Sending -> {Text("Sending")}
-        SharingSendUiState.Done -> {Text("Done")}
+
+        SharingSendUiState.Sending -> {
+            Text("Sending")
+        }
+
+        SharingSendUiState.Done -> {
+            Text("Done")
+        }
     }
 }
 
@@ -55,7 +61,9 @@ fun BluetoothDeviceCard(
     modifier: Modifier = Modifier,
 ) {
     val name = bluetoothDevice.name ?: ""
-    Card(modifier = modifier.fillMaxWidth().clickable { onClick() }) {
+    Card(modifier = modifier
+        .fillMaxWidth()
+        .clickable { onClick() }) {
         Column(modifier = Modifier.padding(8.dp)) {
             Text(name, style = MaterialTheme.typography.titleMedium)
             Spacer(modifier = Modifier.padding(4.dp))

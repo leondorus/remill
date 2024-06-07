@@ -1,6 +1,5 @@
 package org.leondorus.remill.ui.screens.drug
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -53,12 +51,17 @@ fun DrugInfoScreen(
             )
         }
     }) { innerPadding ->
-        Column(modifier = Modifier
-            .padding(innerPadding)
-            .padding(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .padding(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
             Text(text = stringResource(R.string.name_is_druginfo, drugInfoUiState.name))
 
-            NotifGroupViewWidget(notifGroupName = drugInfoUiState.notifGroupName, times = drugInfoUiState.times)
+            NotifGroupViewWidget(
+                notifGroupName = drugInfoUiState.notifGroupName,
+                times = drugInfoUiState.times
+            )
             Text("Proposed sound: %s".format(drugInfoUiState.proposedSound.title))
             if (photoPath != null) {
                 AsyncImage(
@@ -72,7 +75,11 @@ fun DrugInfoScreen(
 }
 
 @Composable
-fun NotifGroupViewWidget(notifGroupName: String, times: List<LocalDateTime>, modifier: Modifier = Modifier) {
+fun NotifGroupViewWidget(
+    notifGroupName: String,
+    times: List<LocalDateTime>,
+    modifier: Modifier = Modifier,
+) {
     Card(modifier = modifier.padding(8.dp)) {
         Column {
             Text("Notif group name: %s".format(notifGroupName))

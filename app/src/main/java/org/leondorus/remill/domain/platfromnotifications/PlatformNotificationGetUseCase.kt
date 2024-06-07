@@ -9,9 +9,11 @@ class PlatformNotificationGetUseCase(private val platformNotificationGetRepo: Pl
     fun getPlatformNotification(id: PlatformNotificationId): Flow<PlatformNotification?> {
         return platformNotificationGetRepo.getPlatformNotification(id)
     }
+
     fun getAllPlatformNotification(): Flow<List<PlatformNotification>> {
         return platformNotificationGetRepo.getAllPlatformNotification()
     }
+
     fun getPlatformNotificationByTime(localDateTime: LocalDateTime): Flow<PlatformNotification?> {
         return platformNotificationGetRepo.getPlatformNotificationByTime(localDateTime)
     }

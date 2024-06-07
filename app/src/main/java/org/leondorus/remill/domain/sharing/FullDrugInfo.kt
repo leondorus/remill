@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 @Serializable
 data class FullDrugInfo(
     val drug: Drug,
-    val notifGroup: NotifGroup?
+    val notifGroup: NotifGroup?,
 )
 
 typealias HolyTriple = Pair<LocalDateTime, FullDrugInfo>

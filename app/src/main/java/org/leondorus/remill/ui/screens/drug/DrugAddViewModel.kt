@@ -1,10 +1,7 @@
 package org.leondorus.remill.ui.screens.drug
 
-import android.app.Application
 import android.content.Context
 import android.net.Uri
-import androidx.core.net.toFile
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,7 +22,17 @@ class DrugAddViewModel(
     private val notifGroupEditUseCase: NotifGroupEditUseCase,
     private val fileProvider: RemillFileProvider,
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(DrugAddUiState("", false, "", emptyList(), false, null, chosenSound = ProposedSound.None))
+    private val _uiState = MutableStateFlow(
+        DrugAddUiState(
+            "",
+            false,
+            "",
+            emptyList(),
+            false,
+            null,
+            chosenSound = ProposedSound.None
+        )
+    )
     val uiState: StateFlow<DrugAddUiState>
         get() = _uiState.asStateFlow()
 
@@ -43,8 +50,13 @@ class DrugAddViewModel(
             flashlight = NotifType.Flashlight(false),
             blinkingScreen = NotifType.BlinkingScreen(false)
         )
-        val newNotifTypes = notifTypes.copy(audio = NotifType.Audio(uiState.value.chosenSound != ProposedSound.None, uiState.value.chosenSound.uri))
-        val usePattern = UsePattern(Schedule(_uiState.value.times), notifTypes)
+        val newNotifTypes = notifTypes.copy(
+            audio = NotifType.Audio(
+                uiState.value.chosenSound != ProposedSound.None,
+                uiState.value.chosenSound.uri
+            )
+        )
+        val usePattern = UsePattern(Schedule(_uiState.value.times), newNotifTypes)
         val notifGroup =
             notifGroupEditUseCase.addNotifGroup(_uiState.value.notifGroupName, usePattern)
 
@@ -100,5 +112,5 @@ data class DrugAddUiState(
     val times: List<LocalDateTime>,
     val hasImage: Boolean,
     val photoUri: Uri?,
-    val chosenSound: ProposedSound
+    val chosenSound: ProposedSound,
 )

@@ -26,7 +26,12 @@ data class DbPlatformNotification(
     fun toPlatformNotification(): PlatformNotification {
         val wrappedId = PlatformNotificationId(id)
         val platformNotification =
-            PlatformNotification(wrappedId, dateTime, notifTypes.toNotifTypes(), NotifGroupId( notifGroupId))
+            PlatformNotification(
+                wrappedId,
+                dateTime,
+                notifTypes.toNotifTypes(),
+                NotifGroupId(notifGroupId)
+            )
 
         return platformNotification
     }

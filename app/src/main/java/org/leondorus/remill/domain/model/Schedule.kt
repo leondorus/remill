@@ -11,17 +11,19 @@ import java.time.format.DateTimeFormatter
 
 @Serializable
 data class Schedule(
-    val times: List<@Serializable(with = LocalDateTimeSerializer::class) LocalDateTime>
-): Sequence<LocalDateTime> {
+    val times: List<@Serializable(with = LocalDateTimeSerializer::class) LocalDateTime>,
+) : Sequence<LocalDateTime> {
     init {
         val timesSorted = times.sorted()
         if (times != timesSorted) {
             throw IllegalArgumentException("Times is not sorted")
         }
     }
+
     override fun iterator(): Iterator<LocalDateTime> {
         return times.iterator()
     }
+
     fun iteratorFrom(ldt: LocalDateTime): Iterator<LocalDateTime> {
         var first: Int = times.size
         for (i in times.indices) {

@@ -15,12 +15,12 @@ data class Drug(
     val id: DrugId,
     val name: String,
     val photoPath: @Serializable(with = UriSerializer::class) Uri? = null,
-    val notifGroupId: NotifGroupId?
+    val notifGroupId: NotifGroupId?,
 )
 
 @Serializable
 @Parcelize
-data class DrugId(val id: Int): Parcelable
+data class DrugId(val id: Int) : Parcelable
 
 @OptIn(ExperimentalSerializationApi::class)
 @Serializer(forClass = Uri::class)

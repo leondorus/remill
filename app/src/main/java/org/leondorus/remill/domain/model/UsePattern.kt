@@ -4,7 +4,6 @@ import android.net.Uri
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
-import org.leondorus.remill.R
 
 @Serializable
 data class UsePattern(
@@ -18,27 +17,31 @@ data class NotifTypes(
     val push: NotifType.Push,
     val audio: NotifType.Audio,
     val flashlight: NotifType.Flashlight,
-    val blinkingScreen: NotifType.BlinkingScreen
-): Parcelable
+    val blinkingScreen: NotifType.BlinkingScreen,
+) : Parcelable
 
 @Serializable
-sealed class NotifType() {
+sealed class NotifType {
     @Serializable
     @Parcelize
     data class Push(
         val isActive: Boolean,
         val notificationTitle: String,
         val notificationText: String,
-        val notificationIcon: Int
+        val notificationIcon: Int,
     ) : NotifType(), Parcelable
+
     @Serializable
     @Parcelize
-    data class Audio(val isActive: Boolean,
-        val audioUri: @Serializable(with = UriSerializer::class) Uri?
+    data class Audio(
+        val isActive: Boolean,
+        val audioUri: @Serializable(with = UriSerializer::class) Uri?,
     ) : NotifType(), Parcelable
+
     @Serializable
     @Parcelize
     data class Flashlight(val isActive: Boolean) : NotifType(), Parcelable
+
     @Serializable
     @Parcelize
     data class BlinkingScreen(val isActive: Boolean) : NotifType(), Parcelable

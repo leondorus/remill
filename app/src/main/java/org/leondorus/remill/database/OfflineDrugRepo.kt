@@ -46,7 +46,7 @@ class OfflineDrugRepo(private val drugDao: DbDrugDao) : DrugGetRepo, DrugEditRep
             dbDrugs.map { dbDrug ->
                 val drugId = DrugId(dbDrug.id)
                 val name = dbDrug.name
-                val uri = if(dbDrug.photoPath == null) null else Uri.parse(dbDrug.photoPath)
+                val uri = if (dbDrug.photoPath == null) null else Uri.parse(dbDrug.photoPath)
                 val notifGroupId =
                     if (dbDrug.notifGroupId == null) null else NotifGroupId(dbDrug.notifGroupId)
 

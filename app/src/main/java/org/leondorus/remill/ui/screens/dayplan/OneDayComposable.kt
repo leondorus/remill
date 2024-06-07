@@ -3,7 +3,6 @@ package org.leondorus.remill.ui.screens.dayplan
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -28,7 +27,11 @@ fun OneDayComposable(
         verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
         items(holyTriples) { holyTriple ->
-            OneTimeCard(onClick = { onTimeClick(holyTriple) }, time = holyTriple, modifier = Modifier.fillMaxWidth())
+            OneTimeCard(
+                onClick = { onTimeClick(holyTriple) },
+                time = holyTriple,
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }
@@ -37,9 +40,15 @@ fun OneDayComposable(
 fun OneTimeCard(onClick: () -> Unit, time: HolyTriple, modifier: Modifier = Modifier) {
     Card(modifier = modifier
         .clickable { onClick() }
+    ) {
+        Column(
+            modifier = Modifier.padding(8.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
-        Column(modifier = Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Text(text = "Drug name: %s".format(time.second.drug.name), style = MaterialTheme.typography.titleMedium)
+            Text(
+                text = "Drug name: %s".format(time.second.drug.name),
+                style = MaterialTheme.typography.titleMedium
+            )
             Text(text = time.first.toString())
         }
     }

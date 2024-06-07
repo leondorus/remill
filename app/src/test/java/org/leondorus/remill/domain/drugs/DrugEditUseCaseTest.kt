@@ -14,8 +14,7 @@ class DrugEditUseCaseTest {
         val drugInfo = listOf(2 to "", 1 to "drug 1", 10 to "other drug", 3 to "drug3")
         val drugs = drugInfo.map { Drug(DrugId(it.first), it.second, null, null) }
 
-        drugs.forEach {
-            drug ->
+        drugs.forEach { drug ->
             try {
                 useCase.updateDrug(drug)
             } catch (e: NoDrugWithSuchId) {
@@ -31,8 +30,7 @@ class DrugEditUseCaseTest {
         val drugInfo = listOf(2 to "", 1 to "drug 1", 10 to "other drug", 3 to "drug3")
         val drugs = drugInfo.map { Drug(DrugId(it.first), it.second, null, null) }
 
-        drugs.forEach {
-                drug ->
+        drugs.forEach { drug ->
             try {
                 useCase.updateDrug(drug)
             } catch (e: NoDrugWithSuchId) {
@@ -70,11 +68,13 @@ class DrugEditUseCaseTest {
 
 class SimpleEditRepo(initDrugs: Iterable<Pair<DrugId, Drug>>) : DrugEditRepo {
     private val drugs: MutableMap<DrugId, Drug> = HashMap()
+
     init {
         for (pair in initDrugs) {
             drugs[pair.first] = pair.second
         }
     }
+
     override suspend fun addDrug(name: String): Drug {
         var newId = DrugId(0)
         for (i in 0..Int.MAX_VALUE) {

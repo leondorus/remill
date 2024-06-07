@@ -76,7 +76,7 @@ class FullDrugInfoUseCase(
                 val flows = drugs.map { drug ->
                     val notifGroupId = drug.notifGroupId
                     val innerResFlow: Flow<NotifGroup?> = if (notifGroupId == null) {
-                        flow {emit(null)}
+                        flow { emit(null) }
                     } else {
                         notifGroupGetUseCase.getNotifGroup(notifGroupId)
                     }
@@ -93,11 +93,12 @@ class FullDrugInfoUseCase(
         val resFlow = allFullDrugs.map { fullDrugs ->
             val resList: MutableList<HolyTriple> = mutableListOf()
             for (fullDrug in fullDrugs) {
-                val fullDrugTriples = fullDrug.notifGroup?.usePattern?.schedule?.times?.filter { time ->
-                    fromTime < time && time < toTime
-                }?.map { time ->
-                    HolyTriple(time, fullDrug)
-                }
+                val fullDrugTriples =
+                    fullDrug.notifGroup?.usePattern?.schedule?.times?.filter { time ->
+                        fromTime < time && time < toTime
+                    }?.map { time ->
+                        HolyTriple(time, fullDrug)
+                    }
                 if (fullDrugTriples != null)
                     resList.addAll(fullDrugTriples)
             }

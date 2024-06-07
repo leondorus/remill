@@ -26,7 +26,7 @@ val DESTINATIONS: List<IconNavigationDestination> = listOf(
 @Composable
 fun RemillNavBar(
     navController: NavController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     NavigationBar(
         modifier = modifier
@@ -35,7 +35,12 @@ fun RemillNavBar(
         val currentDestination = navBackStackEntry?.destination
         DESTINATIONS.forEach { destination ->
             NavigationBarItem(
-                icon = { Icon(ImageVector.vectorResource(destination.icon), contentDescription = stringResource(destination.titleRes)) },
+                icon = {
+                    Icon(
+                        ImageVector.vectorResource(destination.icon),
+                        contentDescription = stringResource(destination.titleRes)
+                    )
+                },
                 label = { Text(stringResource(destination.titleRes)) },
                 selected = currentDestination?.hierarchy?.any { it.route == destination.route } == true,
                 onClick = {

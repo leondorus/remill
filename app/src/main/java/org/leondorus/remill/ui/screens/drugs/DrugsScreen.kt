@@ -18,7 +18,6 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Share
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -83,11 +82,15 @@ fun DrugsScreen(
             DrugsSearchBar(
                 searchQuery = uiState.searchQuery,
                 onSearchUpdate = { viewModel.updateSearchQuery(it) },
-                onToggleFilter = {viewModel.toggleFilter()},
+                onToggleFilter = { viewModel.toggleFilter() },
                 modifier = Modifier.fillMaxWidth()
             )
             if (uiState.isShowingFilter) {
-                FilterSection(sortType = uiState.sortType, onUpdateSortType = {viewModel.updateSort(it)}, modifier = Modifier.padding(8.dp))
+                FilterSection(
+                    sortType = uiState.sortType,
+                    onUpdateSortType = { viewModel.updateSort(it) },
+                    modifier = Modifier.padding(8.dp)
+                )
             }
             LazyColumn(
                 modifier = modifier.padding(8.dp),
@@ -255,7 +258,11 @@ fun DrugsSearchBar(
 }
 
 @Composable
-fun FilterSection(sortType: DrugsSortType, onUpdateSortType: (DrugsSortType) -> Unit, modifier: Modifier = Modifier) {
+fun FilterSection(
+    sortType: DrugsSortType,
+    onUpdateSortType: (DrugsSortType) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Column(modifier = modifier) {
         Text(text = "Sort type:")
         DrugsSortType.DrugsSortTypes.forEach { curSortType ->

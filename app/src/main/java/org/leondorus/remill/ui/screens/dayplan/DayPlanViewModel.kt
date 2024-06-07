@@ -14,7 +14,7 @@ import org.leondorus.remill.domain.sharing.FullDrugInfoUseCase
 import org.leondorus.remill.domain.sharing.HolyTriple
 import java.time.LocalDate
 
-class DayPlanViewModel(fullDrugInfoUseCase: FullDrugInfoUseCase): ViewModel() {
+class DayPlanViewModel(fullDrugInfoUseCase: FullDrugInfoUseCase) : ViewModel() {
     private val _uiState = MutableStateFlow(DayPlanUiState(LocalDate.now()))
     val uiState: StateFlow<DayPlanUiState>
         get() = _uiState.asStateFlow()

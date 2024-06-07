@@ -22,10 +22,10 @@ fun SettingsScreen(
         Button(onClick = { viewModel.requestNotificationPermission() }) {
             Text(stringResource(R.string.request_notification_permissions))
         }
-        Button(onClick = {viewModel.requestBluetoothPermissions()}) {
+        Button(onClick = { viewModel.requestBluetoothPermissions() }) {
             Text(text = stringResource(R.string.request_bluetooth_permissions))
         }
-        Button(onClick = {viewModel.requestCameraPermissions()}) {
+        Button(onClick = { viewModel.requestCameraPermissions() }) {
             Text(text = stringResource(R.string.request_camera_permissions))
         }
     }

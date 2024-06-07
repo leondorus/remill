@@ -44,7 +44,7 @@ class DrugsViewModel(
                 }
                 result
             }
-            val sortedDrugs: List<Drug> = when(uiState.sortType) {
+            val sortedDrugs: List<Drug> = when (uiState.sortType) {
                 DrugsSortType.NameAsc -> filteredDrugs.sortedBy { it.name }
                 DrugsSortType.NameDesc -> filteredDrugs.sortedByDescending { it.name }
                 DrugsSortType.NoSort -> filteredDrugs
@@ -109,7 +109,8 @@ sealed interface DrugsSortType {
     }
 
     companion object {
-        val DrugsSortTypes = listOf(DrugsSortType.NoSort, DrugsSortType.NameAsc, DrugsSortType.NameDesc)
+        val DrugsSortTypes =
+            listOf(NoSort, NameAsc, NameDesc)
     }
 }
 

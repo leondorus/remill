@@ -22,10 +22,14 @@ class AndroidAlarmRepo(
     override suspend fun addPlatformNotification(
         dateTime: LocalDateTime,
         notifTypes: NotifTypes,
-        notifGroupId: NotifGroupId
+        notifGroupId: NotifGroupId,
     ): PlatformNotification {
         val dbPlatformNotification =
-            DbPlatformNotification(dateTime = dateTime, notifTypes = notifTypes.toDbNotifTypes(), notifGroupId = notifGroupId.id)
+            DbPlatformNotification(
+                dateTime = dateTime,
+                notifTypes = notifTypes.toDbNotifTypes(),
+                notifGroupId = notifGroupId.id
+            )
         val id = PlatformNotificationId(
             dbPlatformNotificationDao.insertPlatformNotification(dbPlatformNotification).toInt()
         )
@@ -41,7 +45,11 @@ class AndroidAlarmRepo(
 
         val id = platformNotification.id
         androidAlarmScheduler.deleteAlarm(platformNotification.id)
-        androidAlarmScheduler.addAlarm(id, platformNotification.dateTime, platformNotification.notifTypes) // TODO (change add alarm to update alarm with some AlarmManager flags)
+        androidAlarmScheduler.addAlarm(
+            id,
+            platformNotification.dateTime,
+            platformNotification.notifTypes
+        ) // TODO (change add alarm to update alarm with some AlarmManager flags)
     }
 
     override suspend fun deletePlatformNotification(id: PlatformNotificationId) {
@@ -50,7 +58,9 @@ class AndroidAlarmRepo(
     }
 
     override suspend fun deleteAllPlatformNotificationsWithNotifGroup(notifGroupId: NotifGroupId) {
-        val dbPlatformNotifications = dbPlatformNotificationDao.getAllPlatformNotificationsWithNotifGroupId(notifGroupId.id).first()
+        val dbPlatformNotifications =
+            dbPlatformNotificationDao.getAllPlatformNotificationsWithNotifGroupId(notifGroupId.id)
+                .first()
         for (dbPlatformNotification in dbPlatformNotifications) {
             val id = PlatformNotificationId(dbPlatformNotification.id)
             androidAlarmScheduler.deleteAlarm(id)

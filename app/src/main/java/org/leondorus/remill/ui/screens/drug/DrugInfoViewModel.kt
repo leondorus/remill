@@ -26,29 +26,35 @@ class DrugInfoViewModel(
     @OptIn(ExperimentalCoroutinesApi::class)
     val uiState: StateFlow<DrugInfoUiState> =
         drugGetUseCase.getDrug(drugId).filterNotNull().flatMapLatest { drug ->
-                val notifGroupId = drug.notifGroupId
-                if (notifGroupId != null) {
-                    notifGroupGetUseCase.getNotifGroup(notifGroupId).map { notifGroup ->
-                        val notifGroupName = notifGroup?.name ?: ""
-                        val times = notifGroup?.usePattern?.schedule?.times ?: emptyList()
-                        val soundUri = notifGroup?.usePattern?.notifTypes?.audio?.audioUri
-                        var proposedSound: ProposedSound = ProposedSound.None
-                        for (cur in proposedSounds) {
-                            if (cur.uri == soundUri) {
-                                proposedSound = cur
-                                break
-                            }
+            val notifGroupId = drug.notifGroupId
+            if (notifGroupId != null) {
+                notifGroupGetUseCase.getNotifGroup(notifGroupId).map { notifGroup ->
+                    val notifGroupName = notifGroup?.name ?: ""
+                    val times = notifGroup?.usePattern?.schedule?.times ?: emptyList()
+                    val soundUri = notifGroup?.usePattern?.notifTypes?.audio?.audioUri
+                    var proposedSound: ProposedSound = ProposedSound.None
+                    for (cur in proposedSounds) {
+                        if (cur.uri == soundUri) {
+                            proposedSound = cur
+                            break
                         }
-                        DrugInfoUiState(drug.name, notifGroupName, drug.photoPath.toString(), times, proposedSound)
                     }
-                } else {
-                    flow { DrugInfoUiState(drug.name, "", null, emptyList(), ProposedSound.None) }
+                    DrugInfoUiState(
+                        drug.name,
+                        notifGroupName,
+                        drug.photoPath.toString(),
+                        times,
+                        proposedSound
+                    )
                 }
-            }.stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-                initialValue = DrugInfoUiState("", "", null, listOf(), ProposedSound.None)
-            )
+            } else {
+                flow { DrugInfoUiState(drug.name, "", null, emptyList(), ProposedSound.None) }
+            }
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = DrugInfoUiState("", "", null, listOf(), ProposedSound.None)
+        )
 
 
     companion object {
@@ -61,5 +67,5 @@ data class DrugInfoUiState(
     val notifGroupName: String,
     val photoPath: String?,
     val times: List<LocalDateTime>,
-    val proposedSound: ProposedSound
+    val proposedSound: ProposedSound,
 )

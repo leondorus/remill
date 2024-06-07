@@ -55,7 +55,8 @@ object AppViewModelProvider {
         }
 
         initializer {
-            SharingSendViewModel(this.createSavedStateHandle(),
+            SharingSendViewModel(
+                this.createSavedStateHandle(),
                 remillApplication().container.androidBluetoothWrapper,
                 remillApplication().container.fullDrugIntoUseCase
             )

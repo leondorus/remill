@@ -7,7 +7,6 @@ import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import org.leondorus.remill.domain.model.NotifTypes
 import org.leondorus.remill.domain.model.PlatformNotificationId
 import java.time.LocalDateTime
@@ -15,8 +14,9 @@ import java.time.ZoneId
 
 private const val TAG = "AndroidAlarmSchedulerImpl"
 
-class AndroidAlarmSchedulerImpl(private val context: Context): AndroidAlarmScheduler {
+class AndroidAlarmSchedulerImpl(private val context: Context) : AndroidAlarmScheduler {
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
     @SuppressLint("MissingPermission")
     override fun addAlarm(id: PlatformNotificationId, ldt: LocalDateTime, notifTypes: NotifTypes) {
         val alarmIntent = generatePendingIntent(id, notifTypes)
@@ -29,7 +29,10 @@ class AndroidAlarmSchedulerImpl(private val context: Context): AndroidAlarmSched
         alarmManager.cancel(alarmIntent)
     }
 
-    private fun generatePendingIntent(id: PlatformNotificationId, notifTypes: NotifTypes? = null): PendingIntent {
+    private fun generatePendingIntent(
+        id: PlatformNotificationId,
+        notifTypes: NotifTypes? = null,
+    ): PendingIntent {
         val intent = Intent(context, AlarmReceiver::class.java).apply {
             action = INTENT_ACTION
             if (notifTypes != null) {
@@ -38,7 +41,12 @@ class AndroidAlarmSchedulerImpl(private val context: Context): AndroidAlarmSched
             }
 
         }
-        val pendingIntent = PendingIntent.getBroadcast(context, id.id, intent, FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            id.id,
+            intent,
+            FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT
+        )
 
         return pendingIntent
     }

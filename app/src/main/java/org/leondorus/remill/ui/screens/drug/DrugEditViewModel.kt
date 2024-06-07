@@ -1,10 +1,8 @@
 package org.leondorus.remill.ui.screens.drug
 
-import android.app.Application
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -82,7 +80,17 @@ class DrugEditViewModel(
     }
 
     private val _uiState =
-        MutableStateFlow(DrugEditUiState("", false, "", false, null, emptyList(), ProposedSound.None))
+        MutableStateFlow(
+            DrugEditUiState(
+                "",
+                false,
+                "",
+                false,
+                null,
+                emptyList(),
+                ProposedSound.None
+            )
+        )
     val uiState: StateFlow<DrugEditUiState>
         get() = _uiState.asStateFlow()
 
@@ -96,7 +104,12 @@ class DrugEditViewModel(
         Log.d(TAG, notifGroup.usePattern.notifTypes.toString())
 
         val chosenSound = uiState.value.chosenSound
-        val newNotifTypes = notifGroup.usePattern.notifTypes.copy(audio = NotifType.Audio(chosenSound != ProposedSound.None, chosenSound.uri))
+        val newNotifTypes = notifGroup.usePattern.notifTypes.copy(
+            audio = NotifType.Audio(
+                chosenSound != ProposedSound.None,
+                chosenSound.uri
+            )
+        )
 
         val usePattern = UsePattern(Schedule(uiState.value.times), newNotifTypes)
         val notifGroup =
@@ -141,6 +154,7 @@ class DrugEditViewModel(
     fun photoResultCallback(success: Boolean) {
         _uiState.update { uiState -> uiState.copy(hasImage = success) }
     }
+
     fun genNewUri(context: Context): Uri {
         val tempUri = fileProvider.getNewUri(context)
         _uiState.update { uiState -> uiState.copy(photoPath = tempUri) }
@@ -159,5 +173,5 @@ data class DrugEditUiState(
     val hasImage: Boolean,
     val photoPath: Uri?,
     val times: List<LocalDateTime>,
-    val chosenSound: ProposedSound
+    val chosenSound: ProposedSound,
 )
