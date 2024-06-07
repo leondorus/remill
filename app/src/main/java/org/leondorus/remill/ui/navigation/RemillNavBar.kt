@@ -16,10 +16,11 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import org.leondorus.remill.ui.screens.dayplan.DayPlanDestination
 import org.leondorus.remill.ui.screens.drugs.DrugsDestination
+import org.leondorus.remill.ui.screens.monthplan.MonthPlanDestination
 import org.leondorus.remill.ui.screens.settings.SettingsDestination
 
 val DESTINATIONS: List<IconNavigationDestination> = listOf(
-    DayPlanDestination, DrugsDestination, SettingsDestination
+    DayPlanDestination, MonthPlanDestination, DrugsDestination, SettingsDestination
 )
 
 @Composable

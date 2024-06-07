@@ -69,10 +69,6 @@ fun DayPlanScreen(
 }
 
 private val dateFormatter = DateTimeFormatter.ofPattern("dd")
-private fun Month.displayText(short: Boolean = true): String {
-    val style = if (short) TextStyle.SHORT else TextStyle.FULL
-    return getDisplayName(style, Locale.ENGLISH)
-}
 
 private fun DayOfWeek.displayText(uppercase: Boolean = false): String {
     return getDisplayName(TextStyle.SHORT, Locale.ENGLISH).let { value ->

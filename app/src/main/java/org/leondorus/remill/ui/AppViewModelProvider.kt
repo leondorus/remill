@@ -11,6 +11,7 @@ import org.leondorus.remill.ui.screens.drug.DrugAddViewModel
 import org.leondorus.remill.ui.screens.drug.DrugEditViewModel
 import org.leondorus.remill.ui.screens.drug.DrugInfoViewModel
 import org.leondorus.remill.ui.screens.drugs.DrugsViewModel
+import org.leondorus.remill.ui.screens.monthplan.MonthPlanViewModel
 import org.leondorus.remill.ui.screens.settings.SettingsViewModel
 import org.leondorus.remill.ui.screens.sharing.SharingReceiveViewModel
 import org.leondorus.remill.ui.screens.sharing.SharingSendViewModel
@@ -66,6 +67,9 @@ object AppViewModelProvider {
 
         initializer {
             DayPlanViewModel(remillApplication().container.fullDrugIntoUseCase)
+        }
+        initializer {
+            MonthPlanViewModel(remillApplication().container.fullDrugIntoUseCase)
         }
     }
 }

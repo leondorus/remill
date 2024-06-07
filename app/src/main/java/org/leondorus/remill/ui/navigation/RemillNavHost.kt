@@ -17,6 +17,8 @@ import org.leondorus.remill.ui.screens.drug.DrugInfoDestination
 import org.leondorus.remill.ui.screens.drug.DrugInfoScreen
 import org.leondorus.remill.ui.screens.drugs.DrugsDestination
 import org.leondorus.remill.ui.screens.drugs.DrugsScreen
+import org.leondorus.remill.ui.screens.monthplan.MonthPlanDestination
+import org.leondorus.remill.ui.screens.monthplan.MonthPlanScreen
 import org.leondorus.remill.ui.screens.settings.SettingsDestination
 import org.leondorus.remill.ui.screens.settings.SettingsScreen
 import org.leondorus.remill.ui.screens.sharing.SharingReceiveDestination
@@ -92,6 +94,11 @@ fun RemillNavHost(
             route = DayPlanDestination.route
         ) {
             DayPlanScreen()
+        }
+        composable(
+            route = MonthPlanDestination.route
+        ) {
+            MonthPlanScreen()
         }
     }
 }
