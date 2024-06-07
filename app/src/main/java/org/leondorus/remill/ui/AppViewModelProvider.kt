@@ -11,12 +11,16 @@ import org.leondorus.remill.ui.screens.drug.DrugEditViewModel
 import org.leondorus.remill.ui.screens.drug.DrugInfoViewModel
 import org.leondorus.remill.ui.screens.drugs.DrugsViewModel
 import org.leondorus.remill.ui.screens.settings.SettingsViewModel
+import org.leondorus.remill.ui.screens.sharing.SharingReceiveViewModel
+import org.leondorus.remill.ui.screens.sharing.SharingSendViewModel
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
             DrugsViewModel(
                 remillApplication().container.drugGetUseCase,
+                remillApplication().container.drugEditUseCase,
+                remillApplication().container.notifGroupEditUseCase
             )
         }
         initializer {
@@ -44,6 +48,19 @@ object AppViewModelProvider {
 
         initializer {
             SettingsViewModel(remillApplication().container.permissionManager)
+        }
+
+        initializer {
+            SharingSendViewModel(this.createSavedStateHandle(),
+                remillApplication().container.androidBluetoothWrapper,
+                remillApplication().container.fullDrugIntoUseCase
+            )
+        }
+        initializer {
+            SharingReceiveViewModel(
+                remillApplication().container.androidBluetoothWrapper,
+                remillApplication().container.fullDrugIntoUseCase
+            )
         }
     }
 }

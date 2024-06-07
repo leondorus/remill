@@ -19,7 +19,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TimeInput
-import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
@@ -178,8 +177,14 @@ fun AddNewDateTimeDialog(
     onCancel: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val datePickerState = rememberDatePickerState(initialDisplayMode = DisplayMode.Input)
-    val timePickerState = rememberTimePickerState()
+    val currentTime = LocalDateTime.now()
+    val datePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = currentTime.toEpochSecond(UTC) * 1000,
+        initialDisplayMode = DisplayMode.Input)
+    val timePickerState = rememberTimePickerState(
+        initialHour = currentTime.hour,
+        initialMinute = currentTime.minute
+    )
 
     val curLocalDate: LocalDate?
     val epochDateMillis = datePickerState.selectedDateMillis

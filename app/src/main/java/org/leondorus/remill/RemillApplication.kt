@@ -1,5 +1,6 @@
 package org.leondorus.remill
 
+import android.app.AlarmManager
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -15,6 +16,7 @@ class RemillApplication : Application() {
         super.onCreate()
         container = AndroidRemillContainer(this)
         setupNotificationChannels()
+//        cancelAllAlarms()
     }
 
     private fun setupNotificationChannels() {
@@ -28,6 +30,13 @@ class RemillApplication : Application() {
             val notificationManager =
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    private fun cancelAllAlarms() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            val alarmManager = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            alarmManager.cancelAll()
         }
     }
 

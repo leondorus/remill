@@ -1,15 +1,13 @@
 package org.leondorus.remill.alarms
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import org.leondorus.remill.database.DbNotifGroup
-import org.leondorus.remill.database.DbNotifTypes
 import org.leondorus.remill.database.DbPlatformNotification
 import org.leondorus.remill.database.DbPlatformNotificationDao
 import org.leondorus.remill.database.toDbNotifTypes
 import org.leondorus.remill.database.toDbPlatformNotification
 import org.leondorus.remill.domain.model.NotifGroupId
-import org.leondorus.remill.domain.model.NotifType
 import org.leondorus.remill.domain.model.NotifTypes
 import org.leondorus.remill.domain.model.PlatformNotification
 import org.leondorus.remill.domain.model.PlatformNotificationId
@@ -52,6 +50,12 @@ class AndroidAlarmRepo(
     }
 
     override suspend fun deleteAllPlatformNotificationsWithNotifGroup(notifGroupId: NotifGroupId) {
+        val dbPlatformNotifications = dbPlatformNotificationDao.getAllPlatformNotificationsWithNotifGroupId(notifGroupId.id).first()
+        for (dbPlatformNotification in dbPlatformNotifications) {
+            val id = PlatformNotificationId(dbPlatformNotification.id)
+            androidAlarmScheduler.deleteAlarm(id)
+        }
+
         dbPlatformNotificationDao.deleteAllPlatformNotificationWithNotifGroupId(notifGroupId.id)
     }
 

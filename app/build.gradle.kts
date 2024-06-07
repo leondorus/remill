@@ -4,6 +4,7 @@ plugins {
     id("kotlin-parcelize")
     alias(libs.plugins.google.ksp)
     alias(libs.plugins.room)
+    alias(libs.plugins.jetbrains.kotlin.serialization)
 }
 
 android {
@@ -91,5 +92,7 @@ dependencies {
     implementation(libs.androidx.room.common)
     annotationProcessor(libs.androidx.room.compiler)
     ksp(libs.androidx.room.compiler)
+
+    implementation(libs.kotlinx.serialization.protobuf)
 }
 

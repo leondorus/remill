@@ -2,22 +2,16 @@ package org.leondorus.remill.domain.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import org.leondorus.remill.R
 
+@Serializable
 data class UsePattern(
     val schedule: Schedule,
     val notifTypes: NotifTypes,
 )
 
-
-//@Parcelize
-//data class NotifTypes(
-//    val push: NotifType.Push = NotifType.Push(false, "", "//", R.drawable.notification_icon),
-//    val audio: NotifType.Audio = NotifType.Audio(false),
-//    val flashlight: NotifType.Flashlight = NotifType.Flashlight(false),
-//    val blinkingScreen: NotifType.BlinkingScreen = NotifType.BlinkingScreen(false)
-//): Parcelable
-
+@Serializable
 @Parcelize
 data class NotifTypes(
     val push: NotifType.Push,
@@ -26,18 +20,23 @@ data class NotifTypes(
     val blinkingScreen: NotifType.BlinkingScreen
 ): Parcelable
 
-sealed class NotifType(open val isActive: Boolean) {
+@Serializable
+sealed class NotifType() {
+    @Serializable
     @Parcelize
     data class Push(
-        override val isActive: Boolean,
+        val isActive: Boolean,
         val notificationTitle: String,
         val notificationText: String,
         val notificationIcon: Int
-    ) : NotifType(isActive), Parcelable
+    ) : NotifType(), Parcelable
+    @Serializable
     @Parcelize
-    data class Audio(override val isActive: Boolean) : NotifType(isActive), Parcelable
+    data class Audio(val isActive: Boolean) : NotifType(), Parcelable
+    @Serializable
     @Parcelize
-    data class Flashlight(override val isActive: Boolean) : NotifType(isActive), Parcelable
+    data class Flashlight(val isActive: Boolean) : NotifType(), Parcelable
+    @Serializable
     @Parcelize
-    data class BlinkingScreen(override val isActive: Boolean) : NotifType(isActive), Parcelable
+    data class BlinkingScreen(val isActive: Boolean) : NotifType(), Parcelable
 }

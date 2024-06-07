@@ -24,6 +24,8 @@ interface DbPlatformNotificationDao {
     fun getPlatformNotification(id: Int): Flow<DbPlatformNotification?>
     @Query("SELECT * FROM DbPlatformNotification")
     fun getAllPlatformNotifications(): Flow<List<DbPlatformNotification>>
+    @Query("SELECT * FROM DbPlatformNotification WHERE notifGroupId = :notifGroupId")
+    fun getAllPlatformNotificationsWithNotifGroupId(notifGroupId: Int): Flow<List<DbPlatformNotification>>
     @Query("SELECT * FROM DbPlatformNotification WHERE dateTime = :ldt")
     fun getPlatformNotificationByTime(ldt: LocalDateTime): Flow<DbPlatformNotification?>
 }

@@ -17,4 +17,19 @@
     <string name="drug_reminder_channel_name">Drug reminders</string>
     <string name="drug_reminder_channel_description">Notifications in this channel are reminders for taking your drugs</string>
     <string name="request_notification_permissions">Request notification permissions</string>
+    <string name="delete_this_drug">Delete</string>
+    <string name="drug_info">Info</string>
+    <string name="share_this_drug">Share</string>
+    <string name="request_bluetooth_permissions">Request bluetooth permissions</string>
+    <string name="share_send_drug">Share send drug</string>
+    <string name="add_manually">Add manually</string>
+    <string name="download_from_another_device">Download from another device</string>
+    <string name="share_receive_drug">Share receive drug</string>
+    <string name="sharing_receiving_connecting">Connecting</string>
+    <string name="sharing_receiving_receiving">Receiving</string>
+    <string name="sharing_receiving_done">Done</string>
+    <string name="sharing_receiving_update_local_database">Updating local database</string>
+    <string name="sharing_receiving_no_bluetooth_available">No bluetooth available</string>
+    <string name="sharing_receiving_start_receiving">Start receiving</string>
+    <string name="sharing_receiving_make_discoverable">Make discoverable</string>
 </resources>

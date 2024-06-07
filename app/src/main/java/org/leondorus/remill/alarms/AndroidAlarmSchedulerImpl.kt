@@ -7,10 +7,13 @@ import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import org.leondorus.remill.domain.model.NotifTypes
 import org.leondorus.remill.domain.model.PlatformNotificationId
 import java.time.LocalDateTime
 import java.time.ZoneId
+
+private const val TAG = "AndroidAlarmSchedulerImpl"
 
 class AndroidAlarmSchedulerImpl(private val context: Context): AndroidAlarmScheduler {
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager

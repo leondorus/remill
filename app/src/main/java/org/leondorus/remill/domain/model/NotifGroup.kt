@@ -1,5 +1,8 @@
 package org.leondorus.remill.domain.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class NotifGroup(
     val id: NotifGroupId,
     val name: String,
@@ -7,4 +10,5 @@ data class NotifGroup(
     val drugs: List<DrugId>,
 )
 
+@Serializable
 data class NotifGroupId(val id: Int)

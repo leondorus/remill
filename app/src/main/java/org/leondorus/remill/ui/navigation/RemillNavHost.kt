@@ -17,6 +17,10 @@ import org.leondorus.remill.ui.screens.drugs.DrugsDestination
 import org.leondorus.remill.ui.screens.drugs.DrugsScreen
 import org.leondorus.remill.ui.screens.settings.SettingsDestination
 import org.leondorus.remill.ui.screens.settings.SettingsScreen
+import org.leondorus.remill.ui.screens.sharing.SharingReceiveDestination
+import org.leondorus.remill.ui.screens.sharing.SharingReceiveScreen
+import org.leondorus.remill.ui.screens.sharing.SharingSendDestination
+import org.leondorus.remill.ui.screens.sharing.SharingSendScreen
 
 @Composable
 fun RemillNavHost(
@@ -29,9 +33,16 @@ fun RemillNavHost(
         modifier = modifier,
     ) {
         composable(DrugsDestination.route) {
-            DrugsScreen(navigateToItemInfo = { id ->
-                navController.navigate("${DrugInfoDestination.route}/${id.id}")
-            }, navigateToAddNewDrug = { navController.navigate(DrugAddDestination.route) })
+            DrugsScreen(
+                navigateToItemInfo = { id ->
+                    navController.navigate("${DrugInfoDestination.route}/${id.id}")
+                },
+                navigateToAddingDrugManually = { navController.navigate(DrugAddDestination.route) },
+                navigateToAddDrugViaBluetooth = { navController.navigate(SharingReceiveDestination.route) },
+                navigateToShare = { id ->
+                    navController.navigate("${SharingSendDestination.route}/${id.id}")
+                },
+            )
         }
         composable(DrugAddDestination.route) {
             DrugAddScreen(goBack = { navController.popBackStack() })
@@ -59,6 +70,20 @@ fun RemillNavHost(
             route = SettingsDestination.route
         ) {
             SettingsScreen()
+        }
+
+        composable(
+            route = SharingSendDestination.routeWithArgs,
+            arguments = listOf(navArgument(SharingSendDestination.itemIdArg) {
+                type = NavType.IntType
+            })
+        ) {
+            SharingSendScreen({ navController.popBackStack() })
+        }
+        composable(
+            route = SharingReceiveDestination.route
+        ) {
+            SharingReceiveScreen()
         }
     }
 }

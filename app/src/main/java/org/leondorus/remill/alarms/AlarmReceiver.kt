@@ -21,7 +21,7 @@ import org.leondorus.remill.domain.model.NotifTypes
 private const val TAG = "AlarmReceiver"
 
 class AlarmReceiver : BroadcastReceiver() {
-    lateinit var mp: MediaPlayer
+    private lateinit var mp: MediaPlayer
     override fun onReceive(context: Context, intent: Intent) {
         val action = intent.action
 
@@ -47,7 +47,7 @@ class AlarmReceiver : BroadcastReceiver() {
                     context, notifTypes.push, requestCode
                 )
             }
-            if (true) {
+            if (notifTypes.audio.isActive) {
                 setupAndPlaySound(context)
             }
         }
@@ -78,6 +78,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
     private fun setupAndPlaySound(context: Context) {
         mp = MediaPlayer.create(context, Settings.System.DEFAULT_ALARM_ALERT_URI)
+        mp.isLooping = false
         mp.start()
     }
 }

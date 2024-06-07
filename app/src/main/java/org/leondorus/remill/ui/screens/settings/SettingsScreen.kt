@@ -22,5 +22,8 @@ fun SettingsScreen(
         Button(onClick = { viewModel.requestNotificationPermission() }) {
             Text(stringResource(R.string.request_notification_permissions))
         }
+        Button(onClick = {viewModel.requestBluetoothPermissions()}) {
+            Text(text = stringResource(R.string.request_bluetooth_permissions))
+        }
     }
 }
