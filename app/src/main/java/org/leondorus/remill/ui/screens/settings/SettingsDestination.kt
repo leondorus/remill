@@ -9,5 +9,5 @@ import org.leondorus.remill.ui.navigation.IconNavigationDestination
 object SettingsDestination: IconNavigationDestination {
     override val route: String = "/settings"
     override val titleRes: Int = R.string.settings_title
-    override val icon: ImageVector = Icons.Default.Settings
+    override val icon: Int = R.drawable.settings_icon
 }

@@ -94,5 +94,7 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     implementation(libs.kotlinx.serialization.protobuf)
+
+    implementation(libs.kizitonwose.calendar.compose)
 }
 

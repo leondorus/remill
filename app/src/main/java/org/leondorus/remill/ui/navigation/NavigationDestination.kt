@@ -8,7 +8,7 @@ interface NavigationDestination {
 }
 
 interface IconNavigationDestination: NavigationDestination {
-    val icon: ImageVector
+    val icon: Int
 }
 
 interface ItemNavigationDestination: NavigationDestination {

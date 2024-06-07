@@ -32,4 +32,5 @@
     <string name="sharing_receiving_no_bluetooth_available">No bluetooth available</string>
     <string name="sharing_receiving_start_receiving">Start receiving</string>
     <string name="sharing_receiving_make_discoverable">Make discoverable</string>
+    <string name="day_plan_title">Day plan</string>
 </resources>

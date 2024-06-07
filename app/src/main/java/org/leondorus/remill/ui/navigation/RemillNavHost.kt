@@ -7,6 +7,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import org.leondorus.remill.ui.screens.dayplan.DayPlanDestination
+import org.leondorus.remill.ui.screens.dayplan.DayPlanScreen
 import org.leondorus.remill.ui.screens.drug.DrugAddDestination
 import org.leondorus.remill.ui.screens.drug.DrugAddScreen
 import org.leondorus.remill.ui.screens.drug.DrugEditDestination
@@ -84,6 +86,12 @@ fun RemillNavHost(
             route = SharingReceiveDestination.route
         ) {
             SharingReceiveScreen()
+        }
+
+        composable(
+            route = DayPlanDestination.route
+        ) {
+            DayPlanScreen()
         }
     }
 }

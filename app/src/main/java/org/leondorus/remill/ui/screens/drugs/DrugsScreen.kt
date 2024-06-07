@@ -19,6 +19,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -190,9 +191,11 @@ fun AddMethodOption(
     text: String,
     modifier: Modifier = Modifier,
 ) {
-    Row(modifier = modifier.clickable { onClick() }) {
-        Icon(icon, contentDescription = text)
-        Spacer(modifier = Modifier.padding(12.dp))
-        Text(text = text)
+    Surface(modifier = modifier.clickable { onClick() }.padding(8.dp)) {
+        Row {
+            Icon(icon, contentDescription = text)
+            Spacer(modifier = Modifier.padding(12.dp))
+            Text(text = text)
+        }
     }
 }

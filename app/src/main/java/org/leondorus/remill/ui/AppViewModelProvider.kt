@@ -6,6 +6,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import org.leondorus.remill.RemillApplication
+import org.leondorus.remill.ui.screens.dayplan.DayPlanViewModel
 import org.leondorus.remill.ui.screens.drug.DrugAddViewModel
 import org.leondorus.remill.ui.screens.drug.DrugEditViewModel
 import org.leondorus.remill.ui.screens.drug.DrugInfoViewModel
@@ -61,6 +62,10 @@ object AppViewModelProvider {
                 remillApplication().container.androidBluetoothWrapper,
                 remillApplication().container.fullDrugIntoUseCase
             )
+        }
+
+        initializer {
+            DayPlanViewModel(remillApplication().container.fullDrugIntoUseCase)
         }
     }
 }

@@ -7,16 +7,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
+import org.leondorus.remill.ui.screens.dayplan.DayPlanDestination
 import org.leondorus.remill.ui.screens.drugs.DrugsDestination
 import org.leondorus.remill.ui.screens.settings.SettingsDestination
 
 val DESTINATIONS: List<IconNavigationDestination> = listOf(
-    DrugsDestination, SettingsDestination
+    DayPlanDestination, DrugsDestination, SettingsDestination
 )
 
 @Composable
@@ -31,7 +34,7 @@ fun RemillNavBar(
         val currentDestination = navBackStackEntry?.destination
         DESTINATIONS.forEach { destination ->
             NavigationBarItem(
-                icon = { Icon(destination.icon, contentDescription = stringResource(destination.titleRes)) },
+                icon = { Icon(ImageVector.vectorResource(destination.icon), contentDescription = stringResource(destination.titleRes)) },
                 label = { Text(stringResource(destination.titleRes)) },
                 selected = currentDestination?.hierarchy?.any { it.route == destination.route } == true,
                 onClick = {
