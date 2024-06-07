@@ -1,5 +1,6 @@
 package org.leondorus.remill.ui.screens.drug
 
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.SavedStateHandle
@@ -31,7 +32,7 @@ class DrugEditViewModel(savedStateHandle: SavedStateHandle, drugGetUseCase: Drug
 
     private var isDrugOrNotifGroupNull: Boolean = false
 
-    private val _uiState = MutableStateFlow(DrugEditUiState("", false, "", emptyList()))
+    private val _uiState = MutableStateFlow(DrugEditUiState("", false, "", null, emptyList()))
     val uiState: StateFlow<DrugEditUiState>
         get() = _uiState.asStateFlow()
 
@@ -66,7 +67,7 @@ class DrugEditViewModel(savedStateHandle: SavedStateHandle, drugGetUseCase: Drug
         val usePattern = UsePattern(Schedule(uiState.value.times), notifGroup.usePattern.notifTypes)
         val notifGroup = NotifGroup(notifGroup.id, _uiState.value.notifGroupName, usePattern, emptyList())
         notifGroupEditUseCase.updateNotifGroup(notifGroup)
-        val drug = Drug(drugId, _uiState.value.name, notifGroup.id) // Change to not null
+        val drug = Drug(drugId, _uiState.value.name, _uiState.value.photoPath, notifGroup.id) // Change to not null
 
         drugEditUseCase.updateDrug(drug)
     }
@@ -101,5 +102,6 @@ data class DrugEditUiState(
     val name: String,
     val isDialogShown: Boolean,
     val notifGroupName: String,
+    val photoPath: Uri?,
     val times: List<LocalDateTime>
 )

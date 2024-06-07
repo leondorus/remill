@@ -24,6 +24,8 @@
         android:usesPermissionFlags="neverForLocation"
         tools:targetApi="s" />
 
+    <uses-permission android:name="android.permission.CAMERA"/>
+
 
     <application
         android:name=".RemillApplication"

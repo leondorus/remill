@@ -17,5 +17,6 @@ import androidx.room.PrimaryKey
 data class DbDrug(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String,
+    val photoPath: String?,
     @ColumnInfo(index = true) val notifGroupId: Int?,
 )

@@ -12,7 +12,7 @@ class DrugEditUseCaseTest {
         val repo = SimpleEditRepo(listOf())
         val useCase = DrugEditUseCase(repo)
         val drugInfo = listOf(2 to "", 1 to "drug 1", 10 to "other drug", 3 to "drug3")
-        val drugs = drugInfo.map { Drug(DrugId(it.first), it.second, null) }
+        val drugs = drugInfo.map { Drug(DrugId(it.first), it.second, null, null) }
 
         drugs.forEach {
             drug ->
@@ -29,7 +29,7 @@ class DrugEditUseCaseTest {
         val repo = SimpleEditRepo(listOf())
         val useCase = DrugEditUseCase(repo)
         val drugInfo = listOf(2 to "", 1 to "drug 1", 10 to "other drug", 3 to "drug3")
-        val drugs = drugInfo.map { Drug(DrugId(it.first), it.second, null) }
+        val drugs = drugInfo.map { Drug(DrugId(it.first), it.second, null, null) }
 
         drugs.forEach {
                 drug ->
@@ -63,7 +63,7 @@ class DrugEditUseCaseTest {
         val newName = "new name"
 
         val drug = useCase.addDrug(oldName)
-        useCase.updateDrug(Drug(drug.id, newName, null))
+        useCase.updateDrug(Drug(drug.id, newName, null, null))
         useCase.deleteDrug(drug.id)
     }
 }
@@ -84,7 +84,7 @@ class SimpleEditRepo(initDrugs: Iterable<Pair<DrugId, Drug>>) : DrugEditRepo {
             }
         }
 
-        val drug = Drug(newId, name, null)
+        val drug = Drug(newId, name, null, null)
         drugs[newId] = drug
         return drug
     }

@@ -26,7 +26,7 @@ class DrugGetUseCaseTest {
     @Test
     fun `returns some if there is some`() = runTest {
         val drugList = listOf(0 to "drug0", 1 to "drug1", 124 to "some drug").map {
-            Drug(DrugId(it.first), it.second, null)
+            Drug(DrugId(it.first), it.second, null, null)
         }
         val repo = SimpleGetRepo(drugList)
         val useCase = DrugGetUseCase(repo)
@@ -41,7 +41,7 @@ class DrugGetUseCaseTest {
     @Test
     fun `do not returns some if there is no such`() = runTest {
         val drugList = listOf(0 to "drug0", 1 to "drug1", 124 to "some drug").map {
-            Drug(DrugId(it.first), it.second, null)
+            Drug(DrugId(it.first), it.second, null, null)
         }
         val otherIds = listOf(102, 343, 532, 2, 3).map { DrugId(it) }
 

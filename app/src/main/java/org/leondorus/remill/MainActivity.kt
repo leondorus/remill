@@ -26,6 +26,7 @@ class MainActivity : ComponentActivity(), PermissionProvider, ActivityBluetoothC
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
     private val makeDiscoverableLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
+
     private val container: RemillContainer
         get() = (application as RemillApplication).container
 

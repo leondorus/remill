@@ -1,6 +1,11 @@
 package org.leondorus.remill.ui.screens.drug
 
+import android.content.Context
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,21 +29,30 @@ import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.core.content.FileProvider
+import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
 import org.leondorus.remill.R
+import org.leondorus.remill.domain.model.DrugId
 import org.leondorus.remill.ui.AppViewModelProvider
+import java.io.File
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneOffset.UTC
+import java.util.UUID
 
 @Composable
 fun DrugAddScreen(
@@ -210,6 +224,74 @@ fun AddNewDateTimeDialog(
                         Text(stringResource(R.string.add))
                     }
                 }
+            }
+        }
+    }
+}
+
+class ComposeFileProvider : FileProvider(
+) {
+    companion object {
+        fun getImageUri(context: Context, fileName: String): Uri {
+            val directory = File(context.filesDir, "images")
+            directory.mkdirs()
+            val file = File.createTempFile(
+                "drug_image_" + UUID.randomUUID(),
+                ".jpg",
+                directory,
+            )
+            val authority = context.packageName + ".fileprovider"
+            return getUriForFile(
+                context,
+                authority,
+                file,
+            )
+        }
+    }
+}
+
+@Composable
+fun ImagePicker(
+    finalUri: Uri,
+    modifier: Modifier = Modifier,
+) {
+    var hasImage by remember { mutableStateOf(false) }
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
+
+    val cameraLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicture(),
+        onResult = { success ->
+            hasImage = success
+        }
+    )
+
+    val context = LocalContext.current
+    Box(
+        modifier = modifier,
+    ) {
+        if (hasImage && imageUri != null) {
+            AsyncImage(
+                model = imageUri,
+                modifier = Modifier.fillMaxWidth(),
+                contentDescription = "Selected image",
+            )
+        }
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 32.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Button(
+                modifier = Modifier.padding(top = 16.dp),
+                onClick = {
+                    imageUri = finalUri
+                    cameraLauncher.launch(finalUri)
+                },
+            ) {
+                Text(
+                    text = "Take photo"
+                )
             }
         }
     }

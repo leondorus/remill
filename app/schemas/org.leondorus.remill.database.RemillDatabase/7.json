@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 7,
-    "identityHash": "4ff4ff8d264f4b2cde543996236210de",
+    "identityHash": "b7c7767ceb9dff51ff21b85c0f9b6093",
     "entities": [
       {
         "tableName": "DbDrug",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `notifGroupId` INTEGER, FOREIGN KEY(`notifGroupId`) REFERENCES `DbNotifGroup`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `photoPath` TEXT, `notifGroupId` INTEGER, FOREIGN KEY(`notifGroupId`) REFERENCES `DbNotifGroup`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -19,6 +19,12 @@
             "columnName": "name",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "photoPath",
+            "columnName": "photoPath",
+            "affinity": "TEXT",
+            "notNull": false
           },
           {
             "fieldPath": "notifGroupId",
@@ -265,7 +271,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4ff4ff8d264f4b2cde543996236210de')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b7c7767ceb9dff51ff21b85c0f9b6093')"
     ]
   }
 }

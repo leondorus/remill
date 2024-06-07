@@ -20,7 +20,7 @@ class RamDrugRepo(private val coroutineScope: CoroutineScope): DrugGetRepo, Drug
 
     init {
         val id = DrugId(0)
-        val drug = Drug(id, "a", null)
+        val drug = Drug(id, "a", null, null)
         coroutineScope.launch {
             putAndEmit(id, drug)
         }
@@ -67,7 +67,7 @@ class RamDrugRepo(private val coroutineScope: CoroutineScope): DrugGetRepo, Drug
             }
         }
 
-        val drug = Drug(newId, name, null)
+        val drug = Drug(newId, name, null, null)
         putAndEmit(newId, drug)
         return drug
     }

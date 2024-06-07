@@ -31,15 +31,15 @@ class DrugInfoViewModel(
                     notifGroupGetUseCase.getNotifGroup(notifGroupId).map { notifGroup ->
                         val notifGroupName = notifGroup?.name ?: ""
                         val times = notifGroup?.usePattern?.schedule?.times ?: emptyList()
-                        DrugInfoUiState(drug.name, notifGroupName, times)
+                        DrugInfoUiState(drug.name, notifGroupName, drug.photoPath.toString(), times)
                     }
                 } else {
-                    flow { DrugInfoUiState(drug.name, "", emptyList()) }
+                    flow { DrugInfoUiState(drug.name, "", null, emptyList()) }
                 }
             }.stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-                initialValue = DrugInfoUiState("", "", listOf())
+                initialValue = DrugInfoUiState("", "", null, listOf())
             )
 
 
@@ -51,5 +51,6 @@ class DrugInfoViewModel(
 data class DrugInfoUiState(
     val name: String,
     val notifGroupName: String,
+    val photoPath: String?,
     val times: List<LocalDateTime>,
 )

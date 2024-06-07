@@ -1,5 +1,6 @@
 package org.leondorus.remill.database
 
+import android.net.Uri
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.leondorus.remill.domain.drugs.DrugEditRepo
@@ -10,15 +11,15 @@ import org.leondorus.remill.domain.model.NotifGroupId
 
 class OfflineDrugRepo(private val drugDao: DbDrugDao) : DrugGetRepo, DrugEditRepo {
     override suspend fun addDrug(name: String): Drug {
-        val dbDrug = DbDrug(0, name, null)
+        val dbDrug = DbDrug(0, name, null, null)
         val id = DrugId(drugDao.insertDrug(dbDrug).toInt())
-        val drug = Drug(id, name, null)
+        val drug = Drug(id, name, null, null)
 
         return drug
     }
 
     override suspend fun updateDrug(drug: Drug) {
-        val dbDrug = DbDrug(drug.id.id, drug.name, drug.notifGroupId?.id)
+        val dbDrug = DbDrug(drug.id.id, drug.name, drug.photoPath.toString(), drug.notifGroupId?.id)
         drugDao.updateDrug(dbDrug)
     }
 
@@ -32,10 +33,11 @@ class OfflineDrugRepo(private val drugDao: DbDrugDao) : DrugGetRepo, DrugEditRep
 
             val drugId = DrugId(dbDrug.id)
             val name = dbDrug.name
+            val uri = Uri.parse(dbDrug.photoPath)
             val notifGroupId =
                 if (dbDrug.notifGroupId == null) null else NotifGroupId(dbDrug.notifGroupId)
 
-            Drug(drugId, name, notifGroupId)
+            Drug(drugId, name, uri, notifGroupId)
         }
     }
 
@@ -44,10 +46,11 @@ class OfflineDrugRepo(private val drugDao: DbDrugDao) : DrugGetRepo, DrugEditRep
             dbDrugs.map { dbDrug ->
                 val drugId = DrugId(dbDrug.id)
                 val name = dbDrug.name
+                val uri = Uri.parse(dbDrug.photoPath)
                 val notifGroupId =
                     if (dbDrug.notifGroupId == null) null else NotifGroupId(dbDrug.notifGroupId)
 
-                Drug(drugId, name, notifGroupId)
+                Drug(drugId, name, uri, notifGroupId)
             }
         }
     }

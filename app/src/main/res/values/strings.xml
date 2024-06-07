@@ -36,4 +36,5 @@
     <string name="month_plan_title">Month plan</string>
     <string name="toggle_filter">Toggle filter</string>
     <string name="search_icon">Search icon</string>
+    <string name="request_camera_permissions">Request camera permissions</string>
 </resources>

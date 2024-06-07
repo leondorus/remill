@@ -19,4 +19,8 @@ class SettingsViewModel(private val permissionManager: PermissionManager): ViewM
         }
         permissionManager.requestPermissions(permissions)
     }
+    fun requestCameraPermissions() {
+        val permissions = arrayOf(Manifest.permission.CAMERA)
+        permissionManager.requestPermissions(permissions)
+    }
 }

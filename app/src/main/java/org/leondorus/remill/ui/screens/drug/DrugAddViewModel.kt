@@ -1,26 +1,36 @@
 package org.leondorus.remill.ui.screens.drug
 
+import android.app.Application
+import android.net.Uri
+import androidx.camera.core.ImageCapture
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import org.leondorus.remill.R
+import org.leondorus.remill.RemillApplication
 import org.leondorus.remill.domain.drugs.DrugEditUseCase
 import org.leondorus.remill.domain.model.NotifType
 import org.leondorus.remill.domain.model.NotifTypes
 import org.leondorus.remill.domain.model.Schedule
 import org.leondorus.remill.domain.model.UsePattern
 import org.leondorus.remill.domain.notifgroups.NotifGroupEditUseCase
+import java.io.File
 import java.time.LocalDateTime
+import java.util.UUID
 
 class DrugAddViewModel(
     private val drugEditUseCase: DrugEditUseCase,
     private val notifGroupEditUseCase: NotifGroupEditUseCase,
-) : ViewModel() {
+    application: Application,
+) : AndroidViewModel(application) {
     private val _uiState = MutableStateFlow(DrugAddUiState("", false, "", emptyList()))
     val uiState: StateFlow<DrugAddUiState>
         get() = _uiState.asStateFlow()
+
+    private var photoPath: Uri? = null
 
     suspend fun saveCurDrug() {
         val drug = drugEditUseCase.addDrug(_uiState.value.drugName)
@@ -68,6 +78,9 @@ class DrugAddViewModel(
 
     fun dismissDialog() {
         _uiState.update { uiState -> uiState.copy(isDialogShown = false) }
+    }
+
+    fun takePhoto() {
     }
 }
 

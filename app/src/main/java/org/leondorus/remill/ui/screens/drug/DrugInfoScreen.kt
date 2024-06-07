@@ -1,5 +1,6 @@
 package org.leondorus.remill.ui.screens.drug
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -34,6 +36,8 @@ fun DrugInfoScreen(
     viewModel: DrugInfoViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     val drugInfoUiState by viewModel.uiState.collectAsState()
+
+    val photoPath = drugInfoUiState.photoPath
 
     Scaffold(modifier = modifier, floatingActionButton = {
         FloatingActionButton(
@@ -53,6 +57,9 @@ fun DrugInfoScreen(
             Text(text = stringResource(R.string.name_is_druginfo, drugInfoUiState.name))
 
             NotifGroupViewWidget(notifGroupName = drugInfoUiState.notifGroupName, times = drugInfoUiState.times)
+            if (photoPath != null) {
+//                Image(bitmap = , contentDescription = )
+            }
         }
     }
 }
