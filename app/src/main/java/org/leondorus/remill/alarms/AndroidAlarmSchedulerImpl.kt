@@ -21,7 +21,7 @@ class AndroidAlarmSchedulerImpl(private val context: Context) : AndroidAlarmSche
     override fun addAlarm(id: PlatformNotificationId, ldt: LocalDateTime, notifTypes: NotifTypes) {
         val alarmIntent = generatePendingIntent(id, notifTypes)
         val alarmTime = ldt.atZone(ZoneId.systemDefault()).toEpochSecond() * 1000L
-        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarmTime, alarmIntent)
+        alarmManager.setAlarmClock(AlarmManager.AlarmClockInfo(alarmTime, null), alarmIntent)
     }
 
     override fun deleteAlarm(id: PlatformNotificationId) {
