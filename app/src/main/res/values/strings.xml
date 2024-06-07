@@ -34,4 +34,6 @@
     <string name="sharing_receiving_make_discoverable">Make discoverable</string>
     <string name="day_plan_title">Day plan</string>
     <string name="month_plan_title">Month plan</string>
+    <string name="toggle_filter">Toggle filter</string>
+    <string name="search_icon">Search icon</string>
 </resources>

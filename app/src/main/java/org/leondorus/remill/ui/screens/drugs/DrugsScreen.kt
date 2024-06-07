@@ -2,25 +2,32 @@ package org.leondorus.remill.ui.screens.drugs
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -72,26 +79,35 @@ fun DrugsScreen(
             )
         }
     }) { innerPaddings ->
-        LazyColumn(
-            modifier = modifier
-                .padding(innerPaddings)
-                .padding(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            items(items = drugs, key = { it.id }) { drug ->
-                DrugCard(
-                    drug = drug,
-                    navigateToItemInfo = navigateToItemInfo,
-                    deleteDrug = {
-                        coroutineScope.launch {
-                            viewModel.deleteDrug(it)
-                        }
-                    },
-                    navigateToShare = navigateToShare,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(4.dp)
-                )
+        Column(modifier = modifier.padding(innerPaddings)) {
+            DrugsSearchBar(
+                searchQuery = uiState.searchQuery,
+                onSearchUpdate = { viewModel.updateSearchQuery(it) },
+                onToggleFilter = {viewModel.toggleFilter()},
+                modifier = Modifier.fillMaxWidth()
+            )
+            if (uiState.isShowingFilter) {
+                FilterSection(sortType = uiState.sortType, onUpdateSortType = {viewModel.updateSort(it)}, modifier = Modifier.padding(8.dp))
+            }
+            LazyColumn(
+                modifier = modifier.padding(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                items(items = drugs, key = { it.id }) { drug ->
+                    DrugCard(
+                        drug = drug,
+                        navigateToItemInfo = navigateToItemInfo,
+                        deleteDrug = {
+                            coroutineScope.launch {
+                                viewModel.deleteDrug(it)
+                            }
+                        },
+                        navigateToShare = navigateToShare,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(4.dp)
+                    )
+                }
             }
         }
     }
@@ -191,11 +207,64 @@ fun AddMethodOption(
     text: String,
     modifier: Modifier = Modifier,
 ) {
-    Surface(modifier = modifier.clickable { onClick() }.padding(8.dp)) {
+    Surface(modifier = modifier
+        .clickable { onClick() }
+        .padding(8.dp)) {
         Row {
             Icon(icon, contentDescription = text)
             Spacer(modifier = Modifier.padding(12.dp))
             Text(text = text)
+        }
+    }
+}
+
+@Composable
+fun DrugsSearchBar(
+    searchQuery: String,
+    onSearchUpdate: (String) -> Unit,
+    onToggleFilter: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(modifier = modifier.padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
+        Card(modifier = Modifier.weight(5f)) {
+            TextField(
+                value = searchQuery,
+                onValueChange = onSearchUpdate,
+                modifier = Modifier.fillMaxWidth(),
+                trailingIcon = {
+                    Icon(
+                        Icons.Default.Search, contentDescription = stringResource(
+                            R.string.search_icon
+                        )
+                    )
+                })
+        }
+        Box(modifier = Modifier
+            .clickable { onToggleFilter() }
+            .aspectRatio(1f)
+            .weight(1f), contentAlignment = Alignment.Center) {
+            Icon(
+                ImageVector.vectorResource(R.drawable.sort_by_alpha),
+                contentDescription = stringResource(
+                    R.string.toggle_filter
+                ),
+                modifier = Modifier.size(36.dp)
+            )
+        }
+    }
+}
+
+@Composable
+fun FilterSection(sortType: DrugsSortType, onUpdateSortType: (DrugsSortType) -> Unit, modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
+        Text(text = "Sort type:")
+        DrugsSortType.DrugsSortTypes.forEach { curSortType ->
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                RadioButton(
+                    selected = curSortType == sortType,
+                    onClick = { onUpdateSortType(curSortType) })
+                Text(curSortType.title)
+            }
         }
     }
 }

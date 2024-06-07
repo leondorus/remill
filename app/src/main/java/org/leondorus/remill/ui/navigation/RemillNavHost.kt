@@ -33,7 +33,7 @@ fun RemillNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = DrugsDestination.route, //TODO(change this to dayplan)
+        startDestination = DayPlanDestination.route,
         modifier = modifier,
     ) {
         composable(DrugsDestination.route) {

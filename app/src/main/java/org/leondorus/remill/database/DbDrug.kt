@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey
 
 @Entity(
     foreignKeys = [ForeignKey(
+        onDelete = ForeignKey.CASCADE,
         entity = DbNotifGroup::class,
         parentColumns = arrayOf("id"),
         childColumns = arrayOf("notifGroupId")
